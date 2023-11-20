@@ -7,6 +7,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 
 import { connectToDB } from "../mongoose";
+import { _Icommunity } from "../interfaces";
 
 export async function createCommunity(
     id: string,
@@ -108,12 +109,7 @@ export async function fetchCommunities({
     pageNumber = 1,
     pageSize = 20,
     sortBy = "desc",
-}: {
-    searchString?: string;
-    pageNumber?: number;
-    pageSize?: number;
-    sortBy?: SortOrder;
-}) {
+} : _Icommunity) {
     try {
         connectToDB();
 

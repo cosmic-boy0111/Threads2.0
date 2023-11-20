@@ -6,6 +6,8 @@ import { connectToDB } from "../mongoose"
 import { _Iuser, _Iusers } from "../interfaces";
 import Threads from "../models/thread.model";
 import { FilterQuery } from "mongoose";
+import Community from "../models/community.model";
+import ThreadsTab from "@/components/shared/ThreadsTab";
 
 export const updateUser = async ({
     userId,
@@ -66,15 +68,22 @@ export const fetchUserPosts = async (userId : string) => {
             .populate({
                 path : 'threads',
                 model : Threads,
-                populate : {
-                    path : 'children',
-                    model : Threads,
-                    populate : {
-                        path : 'author',
-                        model : Threads,
-                        select : 'name image id'
-                    }
-                }
+                populate : [
+                    {
+                      path: "community",
+                      model: Community,
+                      select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+                    },
+                    {
+                      path: "children",
+                      model: Threads,
+                      populate: {
+                        path: "author",
+                        model: User,
+                        select: "name image id", // Select the "name" and "_id" fields from the "User" model
+                      },
+                    },
+                ],
             })
 
         return threds;

@@ -60,6 +60,7 @@ export interface _IprofileHeader {
     username : string,
     imgUrl : string,
     bio : string,
+    type? : 'User' | 'Community'
 }
 
 export interface _IthreadsTabs {
@@ -74,4 +75,11 @@ export interface _Iusers {
     pageNumber?: number,
     pageSize?: number,
     sortBy?: SortOrder
+}
+
+export interface _Icommunity {
+    searchString? : string,
+    pageNumber? : number,
+    pageSize? : number,
+    sortBy? : SortOrder,
 }
