@@ -12,7 +12,14 @@ const ThreadsTab = async ({
 
     // Todo : fetch profile threads 
 
-    const result = await Api._user._fetchUserPosts(accountId);
+    let result : any;
+    if(accountType === 'Community') {
+        result = await Api._community._fetchCommunityPosts(accountId);
+    }else{
+        result = await Api._user._fetchUserPosts(accountId);
+        console.log(result.children);
+        
+    }
     if(!result) redirect('/')
 
     return (
@@ -29,7 +36,11 @@ const ThreadsTab = async ({
                             ? {name : result.name,image : result.image,id : result.id} 
                             : {name : thread.author.name,image : thread.author.image,id : thread.author.id}
                     } // todo
-                    community={thread.community} // todo
+                    community={
+                        accountType === "Community"
+                          ? { name: result.name, id: result.id, image: result.image }
+                          : thread.community
+                    }
                     createdAt={thread.createdAt}
                     comments={thread.children}
                 />

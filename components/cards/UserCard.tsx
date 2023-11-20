@@ -5,11 +5,11 @@ import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 
 interface Props {
-    id : string,
-    name : string,
-    username : string,
-    imgUrl : string,
-    personType : string
+    id: string,
+    name: string,
+    username: string,
+    imgUrl: string,
+    personType: string
 }
 
 const UserCard = ({
@@ -18,31 +18,32 @@ const UserCard = ({
     username,
     imgUrl,
     personType
-} : Props) => {
+}: Props) => {
 
     const router = useRouter();
 
-  return (
-    <article className='user-card'>
-        <div className='user-card_avatar'>
-            <Image 
-                src={ imgUrl } 
-                alt={ 'logo' }
-                width={48}
-                height={48}
-                className=' rounded-full' 
-            />
-            <div className=' flex-1 text-ellipsis'>
-                <h4 className=' text-base-semibold text-light-1'>{name}</h4>
-                <p className=' text-small-medium text-gray-1'>@{username}</p>
+    return (
+        <article className='user-card'>
+            <div className='user-card_avatar'>
+                <div className='relative h-12 w-12'>
+                    <Image
+                        src={imgUrl}
+                        alt='community_logo'
+                        fill
+                        className='rounded-full object-cover'
+                    />
+                </div>
+                <div className=' flex-1 text-ellipsis'>
+                    <h4 className=' text-base-semibold text-light-1'>{name}</h4>
+                    <p className=' text-small-medium text-gray-1'>@{username}</p>
+                </div>
             </div>
-        </div>
 
-        <Button className='user-card_btn' onClick={() => router.push(`/profile/${id}`)}>
-            View
-        </Button>
-    </article>
-  )
+            <Button className='user-card_btn' onClick={() => router.push(`/profile/${id}`)}>
+                View
+            </Button>
+        </article>
+    )
 }
 
 export default UserCard
