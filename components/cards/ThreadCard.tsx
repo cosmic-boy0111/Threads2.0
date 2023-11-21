@@ -25,12 +25,12 @@ const ThreadCard = ({
 }: _IthreadCard) => {
 
     return (
-        <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'bg-dark-2 p-7'
-            }`} >
+        <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'
+            }  `  } >
             <div className=" flex items-start justify-between">
                 <div className=" flex w-full flex-1 flex-row gap-4">
                     <div className=" flex flex-col items-center">
-                        <Link href={`/profile/${author.id}`} className=' relative h-11 w-11' >
+                        <Link href={`/profile/${author.id}`} className=' relative h-10 w-10' >
                             <Image
                                 src={author.image}
                                 alt="Profile Image"
@@ -155,7 +155,7 @@ const ThreadCard = ({
                 </div>
             )}
             {!isComment && community && (
-                <Link href={`/communities/${community.id}`} className=' mt-5 flex items-center'>
+                <Link href={`/communities/${community.id}`} className=' mt-3 flex items-center'>
                     <p className=' text-subtle-medium text-gray-1'>
                         {formatDateString(createdAt)}{' '}
                         - {community.name} Community
@@ -169,6 +169,7 @@ const ThreadCard = ({
                     />
                 </Link>
             )}
+            <div className='border-y border-y-dark-2 my-3 md:hidden' />
         </article>
     )
 }
