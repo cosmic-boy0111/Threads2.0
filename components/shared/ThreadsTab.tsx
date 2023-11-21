@@ -15,7 +15,11 @@ const ThreadsTab = async ({
     let result : any;
     if(accountType === 'Community') {
         result = await Api._community._fetchCommunityPosts(accountId);
-    }else{
+    } else if(accountType === 'Replies'){
+        result = await Api._user._getReplies(accountId)
+        console.log(result);
+    }
+    else{
         result = await Api._user._fetchUserPosts(accountId);
         console.log(result.children);
         

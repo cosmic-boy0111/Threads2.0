@@ -5,6 +5,13 @@ import Link from 'next/link'
 import React from 'react'
 import DeleteThread from '../forms/DeleteThread'
 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 const ThreadCard = ({
     id,
     currentUserId,
@@ -42,32 +49,73 @@ const ThreadCard = ({
                         </p>
                         <div className={`${isComment && 'mb-10'} mt-5 flex flex-col gap-3`}>
                             <div className=' flex gap-3.5'>
-                                <Image src={'/assets/heart-gray.svg'}
-                                    alt=' heartbeat'
-                                    width={24}
-                                    height={24}
-                                    className=' cursor-pointer object-contain'
-                                />
-                                <Link href={`/thread/${id}`}>
-                                    <Image src={'/assets/reply.svg'}
-                                        alt='reply'
-                                        width={24}
-                                        height={24}
-                                        className=' cursor-pointer object-contain'
-                                    />
-                                </Link>
-                                <Image src={'/assets/repost.svg'}
-                                    alt='repost'
-                                    width={24}
-                                    height={24}
-                                    className=' cursor-pointer object-contain'
-                                />
-                                <Image src={'/assets/share.svg'}
-                                    alt='share'
-                                    width={24}
-                                    height={24}
-                                    className=' cursor-pointer object-contain'
-                                />
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Image src={'/assets/heart-gray.svg'}
+                                                alt=' heartbeat'
+                                                width={24}
+                                                height={24}
+                                                className=' cursor-pointer object-contain'
+                                            />
+                                        </TooltipTrigger>
+                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                            <p>Like</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Link href={`/thread/${id}`}>
+                                                <Image src={'/assets/reply.svg'}
+                                                    alt='reply'
+                                                    width={24}
+                                                    height={24}
+                                                    className=' cursor-pointer object-contain'
+                                                />
+                                            </Link>
+                                        </TooltipTrigger>
+                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                            <p>Reply</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Link href={`/thread/${id}`}>
+                                                <Image src={'/assets/repost.svg'}
+                                                    alt='repost'
+                                                    width={24}
+                                                    height={24}
+                                                    className=' cursor-pointer object-contain'
+                                                />
+                                            </Link>
+                                        </TooltipTrigger>
+                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                            <p>Repost</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Link href={`/thread/${id}`}>
+                                                <Image src={'/assets/share.svg'}
+                                                    alt='share'
+                                                    width={24}
+                                                    height={24}
+                                                    className=' cursor-pointer object-contain'
+                                                />
+                                            </Link>
+                                        </TooltipTrigger>
+                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                            <p>Share</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                                
                             </div>
                             {isComment && comments.length > 0 && (
                                 <Link href={`/thread/${id}`}>

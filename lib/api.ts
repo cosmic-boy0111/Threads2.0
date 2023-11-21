@@ -6,7 +6,7 @@ import {
     fetchPosts, 
     fetchThreadById 
 } from "./actions/thread.actions";
-import { fetchUser, fetchUserPosts, fetchUsers, getActivity, updateUser } from "./actions/user.actions"
+import { fetchUser, fetchUserPosts, fetchUsers, getActivity, getReplies, updateUser } from "./actions/user.actions"
 import { _IcommentToThread, _Icommunity, _Ithread, _Iuser, _Iusers } from "./interfaces";
 
 class User {
@@ -15,6 +15,7 @@ class User {
     _fetchUserPosts = (userId : string) => fetchUserPosts(userId);
     _fetchFilterUsers = (data : _Iusers) => fetchUsers(data);
     _getActivity = (userId : string) => getActivity(userId);
+    _getReplies = (userId : string) => getReplies(userId);
 }
 
 class Thread {

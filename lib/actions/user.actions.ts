@@ -5,7 +5,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose"
 import { _Iuser, _Iusers } from "../interfaces";
 import Threads from "../models/thread.model";
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Schema } from "mongoose";
 import Community from "../models/community.model";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 
@@ -163,5 +163,39 @@ export const getActivity = async (userId : string) => {
 
     } catch (error : any) {
         throw new Error(`Failed to fetch activity : ${error.message}`)
+    }
+}
+
+export const getReplies = async (userId : string) => {
+    try {
+        await connectToDB();
+
+        const postsQuery = Threads.find({ 
+            author : userId,
+            parentId : { $ne : null}
+        })
+        .populate({
+            path: "author",
+            model: User,
+        }) 
+        .populate({
+            path: "community",
+            model: Community,
+        })
+        .populate({
+            path: "children", // Populate the children field
+            populate: {
+                path: "author", // Populate the author field within children
+                model: User,
+                select: "_id name parentId image", // Select only _id and username fields of the author
+            },
+        });
+
+        const posts = await postsQuery.exec();
+
+        return {threads : posts};
+
+    } catch (error : any) {
+        return new Error(`Failed to load replies : ${error.message} `)
     }
 }

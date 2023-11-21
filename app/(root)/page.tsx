@@ -1,11 +1,25 @@
 import ThreadCard from "@/components/cards/ThreadCard";
 import { Api } from "@/lib/api"
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-const Home =  async () => {
+const Home =  async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
 
-  const result = await Api._thread._fetchPosts(1,30);
   const user = await currentUser();
+  if (!user) return null;
+
+  const userInfo = await Api._user._fetchUser(user.id);
+  if (!userInfo?.onboarded) redirect("/onboarding");
+
+  const result = await Api._thread._fetchPosts(
+    searchParams.page ? +searchParams.page : 1,
+    30
+  );
+
 
   return (
     <>
