@@ -13,6 +13,10 @@ export interface _Ithread {
     text : string,
     author : string,
     communityId : string | null,
+    files : {
+        url : string,
+        type : string
+    }[],
     path : string
 }
 
@@ -26,6 +30,10 @@ export interface _IthreadCard {
         image : string,
         id : string,
     },
+    files : {
+        url : string,
+        type : string
+    }[],
     community : {
         id : string,
         name : string,

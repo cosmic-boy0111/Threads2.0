@@ -11,6 +11,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import ThreadFilesViewer from '../shared/ThreadFilesViewer'
 
 const ThreadCard = ({
     id,
@@ -18,6 +19,7 @@ const ThreadCard = ({
     parentId,
     content,
     author,
+    files,
     community,
     createdAt,
     comments,
@@ -47,6 +49,7 @@ const ThreadCard = ({
                         <p className=' mt-2 text-small-regular text-light-2' >
                             {content}
                         </p>
+                        <ThreadFilesViewer Files={files} />
                         <div className={`${isComment && 'mb-10'} mt-5 flex flex-col gap-3`}>
                             <div className=' flex gap-3.5'>
                                 <TooltipProvider>
@@ -124,7 +127,9 @@ const ThreadCard = ({
                             )}
 
                         </div>
+                        
                     </div>
+
                 </div>
                 <DeleteThread
                     threadId={JSON.stringify(id)}

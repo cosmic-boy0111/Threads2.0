@@ -40,6 +40,7 @@ const ThreadsTab = async ({
                             ? {name : result.name,image : result.image,id : result.id} 
                             : {name : thread.author.name,image : thread.author.image,id : thread.author.id}
                     } // todo
+                    files={thread.files || []}
                     community={
                         accountType === "Community"
                           ? { name: result.name, id: result.id, image: result.image }

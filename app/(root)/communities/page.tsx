@@ -32,11 +32,11 @@ const page = async ({
 
     return (
         <section>
-            <h1 className=" head-text mb-10" > Communities </h1>
+            <h1 className=" head-text mb-10 hidden sm:hidden md:block" > Communities </h1>
 
             {/* // Todo : search bar */}
 
-            <div className='mt-5'>
+            <div className=' md:mt-5 sm:mt-2'>
                 <Searchbar routeType='communities' />
             </div>
 

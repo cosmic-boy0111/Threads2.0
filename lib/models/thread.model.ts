@@ -7,6 +7,7 @@ const threadsSchema = new Schema({
         ref : 'User',
         required : true
     },
+    files : [],
     community : {
         type : Schema.Types.ObjectId,
         ref : 'Community',

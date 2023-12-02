@@ -10,7 +10,7 @@ const Home =  async ({
 }) => {
 
   const user = await currentUser();
-  if (!user) return null;
+  if (!user) return redirect('/sign-in');
 
   const userInfo = await Api._user._fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
@@ -23,10 +23,10 @@ const Home =  async ({
 
   return (
     <>
-      <h1 className="head-text text-left" >
+      <h1 className="head-text text-left hidden sm:hidden md:block" >
         Home
       </h1>
-      <section className=" mt-9 flex flex-col gap-10" >
+      <section className=" md:mt-9 sm:mt-2 flex flex-col sm:gap-1 md:gap-10" >
         {result.posts.length === 0 ? (
           <p className="no-result" > No Threads Found </p>
         ) :  (
@@ -39,6 +39,7 @@ const Home =  async ({
                 parentId={post.parentId}
                 content={post.text}
                 author={post.author}
+                files={post.files || []}
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}

@@ -32,7 +32,7 @@ const page = async ({
 
     return (
         <section>
-            <h1 className=" head-text mb-10" > Search </h1>
+            <h1 className=" head-text mb-10 hidden sm:hidden md:block" > Search </h1>
 
             {/* // Todo : search bar */}
             <Searchbar routeType="search" />
