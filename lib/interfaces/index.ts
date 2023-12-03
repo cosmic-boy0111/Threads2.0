@@ -58,6 +58,10 @@ export interface _IcommentToThread {
     threadId : string,
     commentText : string,
     userId : string,
+    files : {
+        url : string,
+        type : string
+    }[],
     path : string
 }
 

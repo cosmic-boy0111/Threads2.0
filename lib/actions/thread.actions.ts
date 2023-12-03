@@ -199,6 +199,7 @@ export async function addCommentToThread({
     threadId,
     commentText,
     userId,
+    files,
     path
 } : _IcommentToThread ) {
     connectToDB();
@@ -215,6 +216,7 @@ export async function addCommentToThread({
         const commentThread = new Thread({
             text: commentText,
             author: userId,
+            files : files,
             parentId: threadId, // Set the parentId to the original thread's ID
         });
 

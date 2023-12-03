@@ -12,7 +12,7 @@ const Bottombar = () => {
   const { userId } = useAuth(); 
 
   return (
-    <section className={`bottombar ${ pathname.includes('thread') ? 'hidden' : ''}`}>
+    <section className={`bottombar ${ pathname.includes('thread') || pathname.includes('reply') || pathname.includes('share') ? 'hidden' : ''}`}>
       <div className='bottombar_container'>
         {sidebarLinks.map((link) => {
 

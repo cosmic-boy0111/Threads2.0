@@ -33,7 +33,13 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useUploadThing } from "@/lib/uploadthing";
 import ThreadFilesViewer from "../shared/ThreadFilesViewer";
 
-const PostThread = ({ currentUser }: { currentUser: any }) => {
+const PostThread = ({ 
+    currentUser,
+    threadId
+}: { 
+    currentUser: any,
+    threadId? : string
+}) => {
 
     let isComment = true;
     const router = useRouter();
@@ -48,6 +54,7 @@ const PostThread = ({ currentUser }: { currentUser: any }) => {
 
     useEffect(() => {
         const getUser = async () => {
+            textAreaRef.current.scrollIntoView();
             if (!currentUser) router.back();
             setUser(currentUser)
 
@@ -101,6 +108,7 @@ const PostThread = ({ currentUser }: { currentUser: any }) => {
         e.preventDefault();
         setTempThread(e.target.value)
         fieldChange(e.target.value)
+        e.target.value = '';
     }
 
     const resizeTextArea = () => {
@@ -150,15 +158,28 @@ const PostThread = ({ currentUser }: { currentUser: any }) => {
         }
         console.log(uploadFileArray);
 
-        await Api._thread._createThread({
-            text : tempThread,
-            author : author._id,
-            communityId : organization ? organization.id : null,
-            files : uploadFileArray,
-            path : pathname
-        })
-
-        router.push('/')
+        if(threadId){
+            await Api._thread._addCommentToThread({
+                threadId : threadId,
+                commentText : tempThread,
+                userId : author._id,
+                // add files inside this api and modify the server side
+                files : uploadFileArray,
+                path : pathname,
+            })
+    
+            handleReset();
+        }else{   
+            await Api._thread._createThread({
+                text : tempThread,
+                author : author._id,
+                communityId : organization ? organization.id : null,
+                files : uploadFileArray,
+                path : pathname
+            })
+            
+            router.push('/')
+        }
         
     }
 
@@ -179,7 +200,7 @@ const PostThread = ({ currentUser }: { currentUser: any }) => {
                         </Link>
                         <div className=' thread-card_bar' />
                     </div>
-                    <div className=' flex w-full flex-col' style={{ width: '90%' }}>
+                    <div className=' flex w-full flex-col'>
                         <Link href={`/profile/${author.id}`} className=' w-fit' >
                             <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.name}</h4>
                         </Link>
@@ -197,6 +218,7 @@ const PostThread = ({ currentUser }: { currentUser: any }) => {
                                             <FormControl className=' no-focus bg-transparent border-none text-light-1' >
                                                 <textarea
                                                     ref={textAreaRef}
+                                                    autoFocus
                                                     value={field.value}
                                                     onChange={(e: any) => handleThread(e, field.onChange)}
                                                     rows={1}
@@ -217,7 +239,7 @@ const PostThread = ({ currentUser }: { currentUser: any }) => {
                                             </label>
                                         </div>
                                     }
-                                    <div className=" flex w-full justify-end items-center">
+                                    <div className=" flex w-full justify-end items-center z-10">
 
                                         {/* This div is for medium and larger devices */}
                                         <div className="hidden md:flex md:mr-4 md:items-center md:gap-4">

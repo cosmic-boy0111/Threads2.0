@@ -12,6 +12,8 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import ThreadFilesViewer from '../shared/ThreadFilesViewer'
+import ShareBtn from '../shared/ShareBtn'
+
 
 const ThreadCard = ({
     id,
@@ -32,7 +34,7 @@ const ThreadCard = ({
             <div className=" flex items-start justify-between">
                 <div className=" flex w-full flex-1 flex-row gap-4">
                     <div className=" flex flex-col items-center">
-                        <Link href={`/profile/${author.id}`} className=' relative h-10 w-10' >
+                        <Link href={`/profile/${author.id}`} className=' relative h-9 w-9' >
                             <Image
                                 src={author.image}
                                 alt="Profile Image"
@@ -50,7 +52,7 @@ const ThreadCard = ({
                             {content}
                         </p>
                         <ThreadFilesViewer Files={files} />
-                        <div className={`${isComment && 'mb-10'} mt-5 flex flex-col gap-3`}>
+                        <div className={`${isComment && 'mb-10'} mt-1 flex flex-col gap-3`}>
                             <div className=' flex gap-3.5'>
                                 <TooltipProvider>
                                     <Tooltip>
@@ -70,7 +72,7 @@ const ThreadCard = ({
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <Link href={`/thread/${id}`}>
+                                            <Link href={`/reply/${id}`}>
                                                 <Image src={'/assets/reply.svg'}
                                                     alt='reply'
                                                     width={24}
@@ -104,14 +106,13 @@ const ThreadCard = ({
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <Link href={`/thread/${id}`}>
-                                                <Image src={'/assets/share.svg'}
+                                                {/* <Image src={'/assets/share.svg'}
                                                     alt='share'
                                                     width={24}
                                                     height={24}
                                                     className=' cursor-pointer object-contain'
-                                                />
-                                            </Link>
+                                                /> */}
+                                                <ShareBtn id={id} />
                                         </TooltipTrigger>
                                         <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
                                             <p>Share</p>
@@ -122,7 +123,7 @@ const ThreadCard = ({
                             </div>
                             {isComment && comments.length > 0 && (
                                 <Link href={`/thread/${id}`}>
-                                    <p className=' mt-1 text-su text-light-2' >{comments.length} replies</p>
+                                    <p className=' mt-1 text-su text-light-2' >{comments.length} repl{comments.length > 1 ? "ies" : "y"}</p>
                                 </Link>
                             )}
 
@@ -146,21 +147,21 @@ const ThreadCard = ({
                             key={index}
                             src={comment.author.image}
                             alt={`user_${index}`}
-                            width={24}
-                            height={24}
+                            width={24 - index}
+                            height={24 - index}
                             className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
                         />
                     ))}
 
                     <Link href={`/thread/${id}`}>
-                        <p className='mt-1 text-subtle-medium text-gray-1'>
+                        <p className='mt-1 text-subtle-medium text-gray-1 px-1'>
                             {comments.length} repl{comments.length > 1 ? "ies" : "y"}
                         </p>
                     </Link>
                 </div>
             )}
             {!isComment && community && (
-                <Link href={`/communities/${community.id}`} className=' mt-3 flex items-center'>
+                <Link href={`/communities/${community.id}`} className=' mt-3 flex items-center pl-10'>
                     <p className=' text-subtle-medium text-gray-1'>
                         {formatDateString(createdAt)}{' '}
                         - {community.name} Community
