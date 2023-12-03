@@ -30,7 +30,7 @@ const ThreadCard = ({
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'
-            }  `  } >
+            }  `} >
             <div className=" flex items-start justify-between">
                 <div className=" flex w-full flex-1 flex-row gap-4">
                     <div className=" flex flex-col items-center">
@@ -52,7 +52,7 @@ const ThreadCard = ({
                             {content}
                         </p>
                         <ThreadFilesViewer Files={files} />
-                        <div className={`${isComment && 'mb-10'} mt-1 flex flex-col gap-3`}>
+                        <div className={`${isComment && 'mb-10'} mt-1 flex flex-col gap-3 relative`}>
                             <div className=' flex gap-3.5'>
                                 <TooltipProvider>
                                     <Tooltip>
@@ -106,29 +106,37 @@ const ThreadCard = ({
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                                {/* <Image src={'/assets/share.svg'}
-                                                    alt='share'
-                                                    width={24}
-                                                    height={24}
-                                                    className=' cursor-pointer object-contain'
-                                                /> */}
-                                                <ShareBtn id={id} />
+                                            <ShareBtn id={id} />
                                         </TooltipTrigger>
                                         <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
                                             <p>Share</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
-                                
+
                             </div>
                             {isComment && comments.length > 0 && (
                                 <Link href={`/thread/${id}`}>
                                     <p className=' mt-1 text-su text-light-2' >{comments.length} repl{comments.length > 1 ? "ies" : "y"}</p>
                                 </Link>
                             )}
+                            {!community && isComment && (
+                                <div className=' mt-3 flex items-center'>
+                                    <p className=' text-subtle-medium text-gray-1'>
+                                        {formatDateString(createdAt)}
+                                    </p>
+                                </div>
+                            )}
+                            {!isComment && comments.length > 0 && (
+                                <Link href={`/thread/${id}`} className=' absolute -bottom-8'>
+                                    <p className='mt-1 text-subtle-medium text-gray-1'>
+                                        {comments.length} repl{comments.length > 1 ? "ies" : "y"}
+                                    </p>
+                                </Link>
+                            )}
 
                         </div>
-                        
+
                     </div>
 
                 </div>
@@ -153,15 +161,11 @@ const ThreadCard = ({
                         />
                     ))}
 
-                    <Link href={`/thread/${id}`}>
-                        <p className='mt-1 text-subtle-medium text-gray-1 px-1'>
-                            {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-                        </p>
-                    </Link>
+
                 </div>
             )}
             {!isComment && community && (
-                <Link href={`/communities/${community.id}`} className=' mt-3 flex items-center pl-10'>
+                <Link href={`/communities/${community.id}`} className=' mt-3 flex items-center'>
                     <p className=' text-subtle-medium text-gray-1'>
                         {formatDateString(createdAt)}{' '}
                         - {community.name} Community
@@ -174,6 +178,13 @@ const ThreadCard = ({
                         className=' ml-1 rounded-full object-cover'
                     />
                 </Link>
+            )}
+            {!community && !isComment && (
+                <div className=' mt-3 flex items-center'>
+                    <p className=' text-subtle-medium text-gray-1'>
+                        {formatDateString(createdAt)}
+                    </p>
+                </div>
             )}
             <div className='border-y border-y-dark-2 my-3 md:hidden' />
         </article>

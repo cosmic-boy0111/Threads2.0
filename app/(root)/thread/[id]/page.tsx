@@ -4,6 +4,7 @@ import { Api } from "@/lib/api";
 import { currentUser } from "@clerk/nextjs";
 import Head from "next/head";
 import { redirect } from "next/navigation";
+import { useRef } from "react";
 
 const page = async ({ params }: { params: { id: string } }) => {
 
@@ -18,14 +19,13 @@ const page = async ({ params }: { params: { id: string } }) => {
     
     return (
         <section className=" relative" >
-            <Head>
-                {/* Open Graph meta tags (for sharing on social media) */}
+            {/* <Head>
                 <meta property="og:title" content={`${thread.author.name} (@${thread.author.usrename}) on Threads`} />
                 <meta property="og:description" content={`${thread.text.slice(0,25)}...`} />
                 <meta property="og:image" content={thread.files ? thread.files[0].url : ''} />
                 <meta property="og:url" content={`http://localhost:3000/thread/${params.id}`} />
 
-            </Head>
+            </Head> */}
             <div>
                 <ThreadCard
                     key={thread._id}
@@ -42,7 +42,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             </div>
             <p className=" text-light-1 mt-6 text-center" > {
                 thread.children.length === 0 ? '' :
-                thread.children.length === 1 ? 'Reply' : 'Replies'
+                thread.children.length === 1 ? 'Reply'  : 'Replies'
             } </p>
             <div className=" mt-3">
                 {thread.children.map((childItem : any) => {

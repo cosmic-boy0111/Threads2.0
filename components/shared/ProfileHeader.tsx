@@ -48,7 +48,7 @@ const ProfileHeader = ({
 
             <p className=' mt-6 max-w-lg text-base-regular text-light-2' >{bio}</p>
 
-            <div className=' mt-12 h-0.5 w-full bg-dark-3' />
+            <div className=' mt-3 h-0.5 w-full bg-dark-3' />
         </div>
     )
 }
