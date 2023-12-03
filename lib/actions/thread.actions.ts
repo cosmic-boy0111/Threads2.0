@@ -7,7 +7,7 @@ import { connectToDB } from "../mongoose";
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
 import Community from "../models/community.model";
-import { _IcommentToThread, _Ithread } from "../interfaces";
+import { _IcommentToThread, _Irepost, _Ithread } from "../interfaces";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     connectToDB();
@@ -33,7 +33,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
             populate: {
                 path: "author", // Populate the author field within children
                 model: User,
-                select: "_id name parentId image", // Select only _id and username fields of the author
+                select: "_id name parentId image username", // Select only _id and username fields of the author
             },
         });
 
@@ -106,6 +106,12 @@ export async function deleteThread(id: string, path: string): Promise<void> {
         if (!mainThread) {
             throw new Error("Thread not found");
         }
+        // todo : delete all the reposts for this threads and the children reposts
+
+        // if(mainThread.reposts){
+        //     await Thread.deleteMany({ _id: { $in: mainThread.reposts } });
+        // }
+
 
         // Fetch all child threads and their descendants recursively
         const descendantThreads = await fetchAllChildThreads(id);
@@ -160,7 +166,7 @@ export async function fetchThreadById(threadId: string) {
             .populate({
                 path: "author",
                 model: User,
-                select: "_id id name image",
+                select: "_id id name image username",
             }) // Populate the author field with _id and username
             .populate({
                 path: "community",
@@ -173,7 +179,7 @@ export async function fetchThreadById(threadId: string) {
                     {
                         path: "author", // Populate the author field within children
                         model: User,
-                        select: "_id id name parentId image", // Select only _id and username fields of the author
+                        select: "_id id name parentId image username", // Select only _id and username fields of the author
                     },
                     {
                         path: "children", // Populate the children field within children
@@ -181,12 +187,13 @@ export async function fetchThreadById(threadId: string) {
                         populate: {
                             path: "author", // Populate the author field within nested children
                             model: User,
-                            select: "_id id name parentId image", // Select only _id and username fields of the author
+                            select: "_id id name parentId image username", // Select only _id and username fields of the author
                         },
                     },
                 ],
             })
             .exec();
+        
 
         return thread;
     } catch (err) {
@@ -235,3 +242,50 @@ export async function addCommentToThread({
         throw new Error("Unable to add comment");
     }
 }
+
+export const repostThread = async ({
+    parentId,
+    repostedBy,
+    referenceThread,
+    author,
+    path
+} : _Irepost) => {
+    try {
+
+        await connectToDB();
+
+        const originalThread = await Thread.findById(referenceThread);
+
+        if (!originalThread) {
+            throw new Error("Thread not found");
+        }
+
+        const repostThread = await Thread.create({
+            text: 'reposted thread',
+            author: author,
+            parentId: parentId,
+            repostedBy : repostedBy,
+            referenceThread : referenceThread
+        })
+        
+        if(originalThread.reposts){
+            originalThread.reposts.push(repostThread._id);
+        }
+        if(originalThread.reposters){
+            originalThread.reposters.push(repostedBy);
+        }
+
+        await originalThread.save();
+
+        revalidatePath(path);
+        
+    } catch (error) {
+        console.error("Error while reposting:", error);
+        throw new Error("Unable to repost");
+    }
+}
+
+// delete repost thread
+
+// Todo : judt remove that thread from the database
+//        snd also its reference from the reference thread

@@ -30,6 +30,10 @@ const page = async ({ params }: { params: { id: string } }) => {
                     community={thread.community}
                     createdAt={thread.createdAt}
                     comments={thread.children}
+                    isReposted={thread.reposters ? thread.reposters.includes(userInfo._id) : false}
+                    userSecondId={userInfo._id}
+                    authorId={thread.author._id}
+                    repostedBy={thread.repostedBy}
                 />
                 <PostThread currentUser={user} threadId={thread._id} />
             </div>

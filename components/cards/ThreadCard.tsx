@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/tooltip"
 import ThreadFilesViewer from '../shared/ThreadFilesViewer'
 import ShareBtn from '../shared/ShareBtn'
-
+import { Repeat, Repeat1 } from 'lucide-react'
+import RepostThread from '../forms/RepostThread'
 
 const ThreadCard = ({
     id,
@@ -26,13 +27,30 @@ const ThreadCard = ({
     createdAt,
     comments,
     isComment,
+    isReposted,
+    userSecondId,
+    authorId,
+    repostedBy
 }: _IthreadCard) => {
 
     return (
-        <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'
-            }  `} >
+        <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'} `} >
+            {repostedBy && 
+                <div className=" flex w-full flex-1 flex-row gap-4">
+
+                    <div className=" flex flex-col items-end justify-end">
+                        <div className=' flex h-7 w-9 justify-end' >
+                            <Repeat size={24} strokeWidth={'1.25'} className='text-gray-1' />
+                        </div>
+                    </div>
+                    <div className=' flex w-full flex-col' >
+                        <h4 className=' cursor-pointer text-medium-regular text-gray-1' >{repostedBy.username} reposted</h4>
+                    </div>
+                </div>
+            }
             <div className=" flex items-start justify-between">
                 <div className=" flex w-full flex-1 flex-row gap-4">
+
                     <div className=" flex flex-col items-center">
                         <Link href={`/profile/${author.id}`} className=' relative h-9 w-9' >
                             <Image
@@ -46,7 +64,7 @@ const ThreadCard = ({
                     </div>
                     <div className=' flex w-full flex-col' >
                         <Link href={`/profile/${author.id}`} className=' w-fit' >
-                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.name}</h4>
+                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
                         </Link>
                         <p className=' mt-2 text-small-regular text-light-2' >
                             {content}
@@ -89,14 +107,21 @@ const ThreadCard = ({
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <Link href={`/thread/${id}`}>
+                                            {/* <Link href={`/thread/${id}`}>
                                                 <Image src={'/assets/repost.svg'}
                                                     alt='repost'
                                                     width={24}
                                                     height={24}
                                                     className=' cursor-pointer object-contain'
                                                 />
-                                            </Link>
+                                            </Link> */}
+                                            <RepostThread
+                                                isReposted={isReposted}
+                                                currentUserId={userSecondId}
+                                                authorId={authorId}
+                                                parentId={parentId}
+                                                referenceThread={id}
+                                            />
                                         </TooltipTrigger>
                                         <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
                                             <p>Repost</p>

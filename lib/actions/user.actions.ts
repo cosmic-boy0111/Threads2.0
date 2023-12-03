@@ -56,6 +56,20 @@ export const fetchUser = async ( userId : string | undefined | null ) => {
     }
 }
 
+export const fetchUserBy_id = async ( userId : string | undefined | null ) => {
+    try {
+        connectToDB();
+        return await User
+        .findOne({ _id : userId })
+        // .populate({
+        //     path : 'communities',
+        //     model : Community
+        // })
+    } catch (error : any) {
+        throw new Error(`failed to fetch user : ${error.message}`)
+    }
+}
+
 export const fetchUserPosts = async (userId : string) => {
     try {
         connectToDB();

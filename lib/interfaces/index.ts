@@ -26,6 +26,7 @@ export interface _IthreadCard {
     parentId : string | null,
     content : string,
     author : {
+        [x: string]: string | null;
         name : string,
         image : string,
         id : string,
@@ -45,7 +46,15 @@ export interface _IthreadCard {
             image : string,
         }
     }[],
-    isComment? : boolean
+    isComment? : boolean,
+    isReposted : boolean,
+    userSecondId : string,
+    authorId : string,
+    repostedBy : {
+        id : string,
+        name : string,
+        username : string,
+    } | undefined | null,
 }
 
 export interface _Icomment {
@@ -94,4 +103,12 @@ export interface _Icommunity {
     pageNumber? : number,
     pageSize? : number,
     sortBy? : SortOrder,
+}
+
+export interface _Irepost {
+    parentId : string | null,
+    repostedBy : string,
+    referenceThread : string,
+    author : string,
+    path : string,
 }

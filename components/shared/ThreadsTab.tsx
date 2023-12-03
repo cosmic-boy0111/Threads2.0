@@ -3,6 +3,7 @@ import { _IthreadCard, _IthreadsTabs } from '@/lib/interfaces'
 import { redirect } from 'next/navigation';
 import React from 'react'
 import ThreadCard from '../cards/ThreadCard';
+import { currentUser } from '@clerk/nextjs';
 
 const ThreadsTab = async ({
     currentUserId,
@@ -11,6 +12,12 @@ const ThreadsTab = async ({
 }: _IthreadsTabs) => {
 
     // Todo : fetch profile threads 
+
+    const user = await currentUser();
+    if(!user) return null;
+
+    const userInfo = await Api._user._fetchUser(user?.id);
+    if(!userInfo?.onboarded) redirect('/onboarding');
 
     let result : any;
     if(accountType === 'Community') {
@@ -48,6 +55,10 @@ const ThreadsTab = async ({
                     }
                     createdAt={thread.createdAt}
                     comments={thread.children}
+                    isReposted={false}
+                    userSecondId={userInfo._id}
+                    authorId={thread.author._id}
+                    repostedBy={thread.repostedBy}
                 />
             ))}
         </section>

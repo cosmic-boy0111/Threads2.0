@@ -1,3 +1,4 @@
+import RepostThreadCard from "@/components/cards/RepostThreadCard";
 import ThreadCard from "@/components/cards/ThreadCard";
 import Comment from "@/components/forms/Comment";
 import { Api } from "@/lib/api";
@@ -16,6 +17,8 @@ const page = async ({ params }: { params: { id: string } }) => {
     if(!userInfo?.onboarded) redirect('/onboarding');
 
     const thread = await Api._thread._fetchThreadById(params.id);
+    console.log("threads : ", thread);
+    
     
     return (
         <section className=" relative" >
@@ -38,6 +41,10 @@ const page = async ({ params }: { params: { id: string } }) => {
                     community={thread.community}
                     createdAt={thread.createdAt}
                     comments={thread.children}
+                    isReposted={thread.reposters ? thread.reposters.includes(userInfo._id) : false}
+                    userSecondId={userInfo._id}
+                    authorId={thread.author._id}
+                    repostedBy={thread.repostedBy}
                 />
             </div>
             <p className=" text-light-1 mt-6 text-center" > {
@@ -46,7 +53,15 @@ const page = async ({ params }: { params: { id: string } }) => {
             } </p>
             <div className=" mt-3">
                 {thread.children.map((childItem : any) => {
-                    return <ThreadCard
+                    return  childItem.repostedBy ? 
+                    <RepostThreadCard 
+                        referenceThread={childItem.referenceThread} 
+                        currentUserId={user?.id || ""} 
+                        userSecondId={userInfo._id} 
+                        repostedBy={childItem.repostedBy}
+                    /> 
+                        :
+                    <ThreadCard
                                 key={childItem._id}
                                 id={childItem._id}
                                 currentUserId={user?.id || ""}
@@ -58,6 +73,10 @@ const page = async ({ params }: { params: { id: string } }) => {
                                 createdAt={childItem.createdAt}
                                 comments={childItem.children}
                                 isComment={true}
+                                isReposted={childItem.reposters ? childItem.reposters.includes(userInfo._id) : false}
+                                userSecondId={userInfo._id}
+                                authorId={childItem.author._id}
+                                repostedBy={childItem.repostedBy}
                             />
                 })}
             </div>

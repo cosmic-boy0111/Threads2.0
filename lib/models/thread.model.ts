@@ -16,6 +16,26 @@ const threadsSchema = new Schema({
         type : Date,
         default : new Date(),    
     },
+    reposts : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'Threads'
+        }
+    ],
+    reposters : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'User',   
+        }
+    ],
+    repostedBy : {
+        type : Schema.Types.ObjectId,
+        ref : 'User',
+    },
+    referenceThread : {
+        type : Schema.Types.ObjectId,
+        ref : 'Threads'
+    },
     parentId : {
         type : String,
     },

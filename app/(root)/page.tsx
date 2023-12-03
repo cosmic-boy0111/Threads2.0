@@ -1,3 +1,4 @@
+import RepostThreadCard from "@/components/cards/RepostThreadCard";
 import ThreadCard from "@/components/cards/ThreadCard";
 import { Api } from "@/lib/api"
 import { currentUser } from "@clerk/nextjs";
@@ -32,6 +33,14 @@ const Home =  async ({
         ) :  (
           <>
             {result.posts.map((post) => (
+              post.repostedBy ? 
+              <RepostThreadCard 
+                referenceThread={post.referenceThread} 
+                currentUserId={user?.id || ""} 
+                userSecondId={userInfo._id} 
+                repostedBy={post.repostedBy}
+              /> 
+                :
               <ThreadCard 
                 key={post._id}
                 id={post._id}
@@ -43,6 +52,10 @@ const Home =  async ({
                 community={post.community}
                 createdAt={post.createdAt}
                 comments={post.children}
+                isReposted={post.reposters ? post.reposters.includes(userInfo._id) : false}
+                userSecondId={userInfo._id}
+                authorId={post.author._id} 
+                repostedBy={post.repostedBy} 
               />
             ))}
           </>
