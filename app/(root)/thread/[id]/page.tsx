@@ -55,10 +55,12 @@ const page = async ({ params }: { params: { id: string } }) => {
                 {thread.children.map((childItem : any) => {
                     return  childItem.repostedBy ? 
                     <RepostThreadCard 
+                        repostId={childItem._id}
                         referenceThread={childItem.referenceThread} 
                         currentUserId={user?.id || ""} 
                         userSecondId={userInfo._id} 
                         repostedBy={childItem.repostedBy}
+                        isComment={true}
                     /> 
                         :
                     <ThreadCard

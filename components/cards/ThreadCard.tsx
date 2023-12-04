@@ -30,12 +30,13 @@ const ThreadCard = ({
     isReposted,
     userSecondId,
     authorId,
-    repostedBy
+    repostedBy,
+    repostThreadId
 }: _IthreadCard) => {
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'} `} >
-            {repostedBy && 
+            {repostedBy &&
                 <div className=" flex w-full flex-1 flex-row gap-4">
 
                     <div className=" flex flex-col items-end justify-end">
@@ -44,7 +45,7 @@ const ThreadCard = ({
                         </div>
                     </div>
                     <div className=' flex w-full flex-col' >
-                        <h4 className=' cursor-pointer text-medium-regular text-gray-1' >{repostedBy.username} reposted</h4>
+                        <h4 className=' cursor-pointer text-medium-regular text-gray-1' >{userSecondId.toString() === repostedBy.id.toString() ? 'You' : repostedBy.username} reposted</h4>
                     </div>
                 </div>
             }
@@ -66,7 +67,7 @@ const ThreadCard = ({
                         <Link href={`/profile/${author.id}`} className=' w-fit' >
                             <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
                         </Link>
-                        <p className=' mt-2 text-small-regular text-light-2' >
+                        <p className=' mt-1 text-small-regular text-light-2' >
                             {content}
                         </p>
                         <ThreadFilesViewer Files={files} />
@@ -107,20 +108,13 @@ const ThreadCard = ({
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            {/* <Link href={`/thread/${id}`}>
-                                                <Image src={'/assets/repost.svg'}
-                                                    alt='repost'
-                                                    width={24}
-                                                    height={24}
-                                                    className=' cursor-pointer object-contain'
-                                                />
-                                            </Link> */}
                                             <RepostThread
                                                 isReposted={isReposted}
                                                 currentUserId={userSecondId}
                                                 authorId={authorId}
                                                 parentId={parentId}
                                                 referenceThread={id}
+                                                repostThreadId={repostThreadId}
                                             />
                                         </TooltipTrigger>
                                         <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
@@ -165,13 +159,16 @@ const ThreadCard = ({
                     </div>
 
                 </div>
-                <DeleteThread
+                {
+                    !repostedBy &&
+                    <DeleteThread
                     threadId={JSON.stringify(id)}
                     currentUserId={currentUserId}
                     authorId={author.id}
                     parentId={parentId}
                     isComment={isComment}
-                />
+                    />
+                }
             </div>
             {!isComment && comments.length > 0 && (
                 <div className='ml-1 mt-3 flex items-center gap-2'>
@@ -189,28 +186,38 @@ const ThreadCard = ({
 
                 </div>
             )}
-            {!isComment && community && (
-                <Link href={`/communities/${community.id}`} className=' mt-3 flex items-center'>
-                    <p className=' text-subtle-medium text-gray-1'>
-                        {formatDateString(createdAt)}{' '}
-                        - {community.name} Community
-                    </p>
-                    <Image
-                        src={community.image}
-                        alt={community.name}
-                        width={17}
-                        height={17}
-                        className=' ml-1 rounded-full object-cover'
-                    />
-                </Link>
-            )}
-            {!community && !isComment && (
-                <div className=' mt-3 flex items-center'>
-                    <p className=' text-subtle-medium text-gray-1'>
-                        {formatDateString(createdAt)}
-                    </p>
+            <div className=" flex w-full flex-1 flex-row gap-4">
+
+                <div className=" flex flex-col items-end justify-end">
+                    <div className=' flex h-2 w-9 justify-end' >
+                    </div>
                 </div>
-            )}
+                <div className=' flex w-full flex-col' >
+                    {!isComment && community && (
+                        <Link href={`/communities/${community.id}`} className=' mt-1 flex items-center'>
+                            <p className=' text-subtle-medium text-gray-1'>
+                                {formatDateString(createdAt)}{' '}
+                                - {community.name} Community
+                            </p>
+                            <Image
+                                src={community.image}
+                                alt={community.name}
+                                width={17}
+                                height={17}
+                                className=' ml-1 rounded-full object-cover'
+                            />
+                        </Link>
+                    )}
+                    {!community && !isComment && (
+                        <div className=' mt-1 flex items-center'>
+                            <p className=' text-subtle-medium text-gray-1'>
+                                {formatDateString(createdAt)}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
             <div className='border-y border-y-dark-2 my-3 md:hidden' />
         </article>
     )

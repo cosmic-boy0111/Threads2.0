@@ -55,6 +55,7 @@ export interface _IthreadCard {
         name : string,
         username : string,
     } | undefined | null,
+    repostThreadId? : string 
 }
 
 export interface _Icomment {
@@ -111,4 +112,12 @@ export interface _Irepost {
     referenceThread : string,
     author : string,
     path : string,
+}
+
+export interface _IrepostDelete {
+    parentId : string | null,
+    currentUserId : string,
+    mainThreadId : string,
+    repostThreadId : string | null | undefined,
+    path : string
 }

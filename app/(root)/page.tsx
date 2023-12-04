@@ -35,10 +35,12 @@ const Home =  async ({
             {result.posts.map((post) => (
               post.repostedBy ? 
               <RepostThreadCard 
+                repostId={post._id}
                 referenceThread={post.referenceThread} 
                 currentUserId={user?.id || ""} 
                 userSecondId={userInfo._id} 
                 repostedBy={post.repostedBy}
+                isComment={false}
               /> 
                 :
               <ThreadCard 

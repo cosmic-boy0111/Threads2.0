@@ -7,7 +7,8 @@ import { connectToDB } from "../mongoose";
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
 import Community from "../models/community.model";
-import { _IcommentToThread, _Irepost, _Ithread } from "../interfaces";
+import { _IcommentToThread, _Irepost, _IrepostDelete, _Ithread } from "../interfaces";
+import { Schema } from "mongoose";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     connectToDB();
@@ -96,7 +97,7 @@ async function fetchAllChildThreads(threadId: string): Promise<any[]> {
     return descendantThreads;
 }
 
-export async function deleteThread(id: string, path: string): Promise<void> {
+export async function deleteThread(id: string, path: string, parentId : string | null): Promise<void> {
     try {
         connectToDB();
 
@@ -106,12 +107,28 @@ export async function deleteThread(id: string, path: string): Promise<void> {
         if (!mainThread) {
             throw new Error("Thread not found");
         }
-        // todo : delete all the reposts for this threads and the children reposts
+        // updated todo : remove all the reposts of this thread
+        //                if parent is present then remove all reposts if from parent thread 
+        //   
 
         // if(mainThread.reposts){
         //     await Thread.deleteMany({ _id: { $in: mainThread.reposts } });
         // }
 
+        // delete from parent thread if has
+
+        const childArrayWithRepost = mainThread.reposts;
+        if(parentId){
+            // deleting reposts ids from parent thread
+            childArrayWithRepost.push(id);
+            const parentThread = await Thread.findById(parentId);
+            parentThread.children = parentThread.children.filter((childId : Schema.Types.ObjectId) => !childArrayWithRepost.includes(childId));
+
+            await parentThread.save();
+        }
+
+        // deleting all reposts related to the thread
+        await Thread.deleteMany({ _id: { $in: childArrayWithRepost } });
 
         // Fetch all child threads and their descendants recursively
         const descendantThreads = await fetchAllChildThreads(id);
@@ -274,8 +291,14 @@ export const repostThread = async ({
         if(originalThread.reposters){
             originalThread.reposters.push(repostedBy);
         }
-
+        
         await originalThread.save();
+
+        if(parentId){
+            const parentThread = await Thread.findById(parentId);
+            parentThread.children.unshift(repostThread._id);
+            await parentThread.save();
+        }
 
         revalidatePath(path);
         
@@ -288,4 +311,51 @@ export const repostThread = async ({
 // delete repost thread
 
 // Todo : judt remove that thread from the database
-//        snd also its reference from the reference thread
+//        snd also its reference from the reference thread of maint hread
+
+export const removeRepostThread = async ({
+    parentId,
+    currentUserId,
+    mainThreadId,
+    repostThreadId,
+    path
+} : _IrepostDelete) => {
+    try {
+        
+        await connectToDB();
+
+        const mainThread = await Thread.findById(mainThreadId);
+        if(!mainThread){
+            throw new Error("Thread not found");
+        }
+
+        const repostThread = 
+            repostThreadId ? 
+                await Thread.findById(repostThreadId) : 
+                await Thread.findOne({
+                    repostedBy : currentUserId,
+                    referenceThread : mainThread
+                });
+
+        if(repostThread.repostedBy.toString() !== currentUserId.toString()){
+            throw new Error("user not match");
+        }
+
+        await Thread.findByIdAndDelete(repostThread._id);
+        mainThread.reposts = mainThread.reposts.filter((id : Schema.Types.ObjectId) => id.toString() !== repostThread._id.toString());
+        mainThread.reposters = mainThread.reposters.filter((id : Schema.Types.ObjectId) => id.toString() !== currentUserId.toString());
+        await mainThread.save();
+
+        if(parentId){
+            const parentThread = await Thread.findById(parentId);
+            parentThread.children = parentThread.children.filter((childId : Schema.Types.ObjectId) => childId.toString() !== repostThread._id.toString());
+            await parentThread.save();
+        }
+
+        revalidatePath(path);
+
+    } catch (error : any) {
+        console.error("Error while repost delete:", error.message);
+        throw new Error("Unable to repost delete");
+    }
+}

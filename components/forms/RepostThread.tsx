@@ -9,7 +9,8 @@ interface Props {
     currentUserId : string,
     authorId : string,
     parentId : string | null,
-    referenceThread : string
+    referenceThread : string,
+    repostThreadId : string | null | undefined,
 }
 
 const RepostThread = ({
@@ -17,18 +18,14 @@ const RepostThread = ({
     currentUserId,
     authorId,
     parentId,
-    referenceThread
+    referenceThread,
+    repostThreadId
 } : Props) => {
 
     const pathname = usePathname();
-    const [check, setCheck] = useState<boolean>(isReposted)
+    // const [check, setCheck] = useState<boolean>(isReposted)
 
     const addRepost = async () => {
-        // console.log(isReposted,
-        //     currentUserId,
-        //     authorId,
-        //     parentId,
-        //     referenceThread);
 
         if(currentUserId === authorId) return;
         console.log('under add repost');
@@ -42,8 +39,6 @@ const RepostThread = ({
                 author : authorId,
                 path : pathname
             })
-            
-            setCheck(true)
 
         } catch (error) {
             console.log(error);
@@ -53,13 +48,26 @@ const RepostThread = ({
     
     const removeRepost = async () => {
         console.log('under remove repost');
-        setCheck(false)
+        if(currentUserId === authorId) return;
+        console.log(referenceThread, currentUserId, repostThreadId);
+        try {
+            await Api._thread._removeRepostThread({
+                parentId : parentId,
+                currentUserId : currentUserId,
+                mainThreadId : referenceThread,
+                repostThreadId : repostThreadId,
+                path : pathname
+            })
+        } catch (error) {
+            console.log(error);
+        }
+        // setCheck(false)
     }
 
 
     return (
-        <div onClick={() => check ? removeRepost() : addRepost()}>
-            {check ?
+        <div onClick={() => isReposted ? removeRepost() : addRepost()}>
+            {isReposted ?
                 <Repeat1 size={24} strokeWidth={'1.25'} className='text-light-4' /> :
                 <Repeat size={24} strokeWidth={'1.25'} className='text-light-4' />
             }

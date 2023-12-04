@@ -1,14 +1,19 @@
-import { fetchCommunities, fetchCommunityDetails, fetchCommunityPosts } from "./actions/community.actions";
+import { 
+    fetchCommunities, 
+    fetchCommunityDetails, 
+    fetchCommunityPosts 
+} from "./actions/community.actions";
 import { 
     addCommentToThread, 
     createThread, 
     deleteThread, 
     fetchPosts, 
     fetchThreadById, 
+    removeRepostThread, 
     repostThread
 } from "./actions/thread.actions";
 import { fetchUser, fetchUserBy_id, fetchUserPosts, fetchUsers, getActivity, getReplies, updateUser } from "./actions/user.actions"
-import { _IcommentToThread, _Icommunity, _Irepost, _Ithread, _Iuser, _Iusers } from "./interfaces";
+import { _IcommentToThread, _Icommunity, _Irepost, _IrepostDelete, _Ithread, _Iuser, _Iusers } from "./interfaces";
 
 class User {
     _updateUser = (data : _Iuser) => updateUser(data);
@@ -25,8 +30,9 @@ class Thread {
     _fetchPosts = (pageNumber = 1, pageSize = 20) => fetchPosts(pageNumber,pageSize);
     _fetchThreadById = (id : string) => fetchThreadById(id);
     _addCommentToThread = ( data : _IcommentToThread ) => addCommentToThread(data);
-    _deleteThread = (id: string, path: string) => deleteThread(id, path);
+    _deleteThread = (id: string, path: string, parentId : string | null) => deleteThread(id, path, parentId);
     _repostThread = (data : _Irepost) => repostThread(data);
+    _removeRepostThread = (data : _IrepostDelete) => removeRepostThread(data);
 }
 
 class Community {

@@ -3,12 +3,27 @@ import { Api } from '@/lib/api'
 import ThreadCard from './ThreadCard';
 
 const RepostThreadCard = async (
-    { referenceThread, currentUserId, userSecondId, repostedBy }
-        : { referenceThread: string, currentUserId: string, userSecondId: string, repostedBy: string }) => {
+    { 
+        repostId, 
+        referenceThread, 
+        currentUserId, 
+        userSecondId, 
+        repostedBy, 
+        isComment 
+    }
+        : 
+    { 
+        repostId: string, 
+        referenceThread: string, 
+        currentUserId: string, 
+        userSecondId: string, 
+        repostedBy: string, 
+        isComment?:boolean 
+}) => {
 
     const thread = await Api._thread._fetchThreadById(referenceThread);
     const user = await Api._user._fetchUserBy_id(repostedBy);
-    console.log(thread);
+    console.log(thread, userSecondId, user._id);
 
 
     return (
@@ -30,6 +45,8 @@ const RepostThreadCard = async (
                 name : user.name,
                 username : user.username
             }}
+            repostThreadId={repostId}
+            isComment={isComment}
         />
     )
 }
