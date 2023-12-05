@@ -14,7 +14,7 @@ const threadsSchema = new Schema({
     },
     createdAt : {
         type : Date,
-        default : new Date(),    
+        default : Date.now,    
     },
     reposts : [
         {

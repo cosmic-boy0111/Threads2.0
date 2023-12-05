@@ -33,39 +33,26 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useUploadThing } from "@/lib/uploadthing";
 import ThreadFilesViewer from "../shared/ThreadFilesViewer";
 
-const PostThread = ({ 
-    currentUser,
+const PostThread = ({
+    author,
     threadId
-}: { 
-    currentUser: any,
-    threadId? : string
+}: {
+    author: any,
+    threadId?: string
 }) => {
 
     let isComment = true;
     const router = useRouter();
     const pathname = usePathname();
-    const {organization} = useOrganization();
+    const { organization } = useOrganization();
     const { startUpload } = useUploadThing("thread");
     const textAreaRef = useRef<any>(null)
     const [tempThread, setTempThread] = useState<string>('')
-    const [user, setUser] = useState<any>({})
-    const [author, setAuthor] = useState<any>({})
+    // const [author, setAuthor] = useState<any>({})
     const [url, setUrl] = useState<string>('')
 
     useEffect(() => {
-        const getUser = async () => {
-            textAreaRef.current.scrollIntoView();
-            if (!currentUser) router.back();
-            setUser(currentUser)
-
-            const authorFetch = await Api._user._fetchUser(currentUser?.id);
-            if (!authorFetch.onboarded) redirect('/onboarding');
-
-            setAuthor(authorFetch)
-
-        }
-
-        getUser();
+        textAreaRef.current.scrollIntoView();
     }, [])
 
 
@@ -82,22 +69,22 @@ const PostThread = ({
     var multipleFileArray: any = [];
 
     const [multipleFile, setMultipleFile] = useState<{
-        url : string,
-        type : string
+        url: string,
+        type: string
     }[]>([]);
     const [files, setFiles] = useState<File[]>([])
 
     const uploadMultipleFiles = (e: ChangeEvent<HTMLInputElement>) => {
         multipleFileObj.push(e.target.files);
-        if(e.target.files) {
-            console.log(Array.from(e.target.files).slice(0,10));
-            setFiles(Array.from(e.target.files).slice(0,10));
+        if (e.target.files) {
+            console.log(Array.from(e.target.files).slice(0, 10));
+            setFiles(Array.from(e.target.files).slice(0, 10));
         }
         for (let i = 0; i < multipleFileObj[0].length; i++) {
-            if(i >= 10) break;
+            if (i >= 10) break;
             multipleFileArray.push({
-                url : URL.createObjectURL(multipleFileObj[0][i]),
-                type : multipleFileObj[0][i].type
+                url: URL.createObjectURL(multipleFileObj[0][i]),
+                type: multipleFileObj[0][i].type
             });
         }
         console.log(multipleFileArray);
@@ -125,10 +112,10 @@ const PostThread = ({
         setTempThread('')
     }
 
-    const removeFile = (index : number) => {
+    const removeFile = (index: number) => {
         setMultipleFile([
-          ...multipleFile.slice(0, index),
-          ...multipleFile.slice(index + 1, multipleFile.length)
+            ...multipleFile.slice(0, index),
+            ...multipleFile.slice(index + 1, multipleFile.length)
         ]);
         setFiles([
             ...files.slice(0, index),
@@ -136,60 +123,62 @@ const PostThread = ({
         ]);
     };
 
-    const onSubmit = async (e : any) => {
+    const onSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("under submit",files);
-        const uploadFileArray : {
-            url : string,
-            type : string
+        console.log("under submit", files);
+        const uploadFileArray: {
+            url: string,
+            type: string
         }[] = []
-        if(files.length > 0){
+        if (files.length > 0) {
             const attachedFiles = await startUpload(files)
             console.log(attachedFiles);
-            
-            if(attachedFiles){
-                for(let i = 0; i < attachedFiles.length; i++){
+
+            if (attachedFiles) {
+                for (let i = 0; i < attachedFiles.length; i++) {
                     uploadFileArray.push({
-                        url : attachedFiles[i].url,
-                        type : multipleFile[i].type
+                        url: attachedFiles[i].url,
+                        type: multipleFile[i].type
                     })
                 }
             }
         }
         console.log(uploadFileArray);
 
-        if(threadId){
+        if (threadId) {
             await Api._thread._addCommentToThread({
-                threadId : threadId,
-                commentText : tempThread,
-                userId : author._id,
+                threadId: threadId,
+                commentText: tempThread,
+                userId: author._id,
                 // add files inside this api and modify the server side
-                files : uploadFileArray,
-                path : pathname,
+                files: uploadFileArray,
+                path: pathname,
             })
-    
+
             handleReset();
-        }else{   
+        } else {
             await Api._thread._createThread({
-                text : tempThread,
-                author : author._id,
-                communityId : organization ? organization.id : null,
-                files : uploadFileArray,
-                path : pathname
+                text: tempThread,
+                author: author._id,
+                communityId: organization ? organization.id : null,
+                files: uploadFileArray,
+                path: pathname
             })
-            
-            router.push('/')
+
+            router.push('/');
         }
-        
+
+
     }
 
 
 
     return (
-        <article className={`flex w-full flex-col rounded-xl md:bg-dark-2 md:p-7 sm:bg-none sm:p-0 sm:mt-2 md:mt-7`} >
+        <article className={`flex w-full flex-col rounded-xl md:bg-dark-2 md:p-7 sm:bg-none sm:p-0 sm:mt-0 md:mt-10 lg:mt-10`} >
             <div className=" flex items-start justify-between">
                 <div className=" flex w-full flex-1 flex-row gap-4">
-                    <div className=" flex flex-col items-center" style={{ width: '10%' }}>
+
+                    <div className=" flex flex-col items-center">
                         <Link href={`/profile/${author.id}`} className=' relative h-9 w-9' >
                             <Image
                                 src={author.image}
@@ -200,22 +189,21 @@ const PostThread = ({
                         </Link>
                         <div className=' thread-card_bar' />
                     </div>
-                    <div className=' flex w-full flex-col'>
+                    <div className=' flex w-full flex-col' >
                         <Link href={`/profile/${author.id}`} className=' w-fit' >
                             <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.name}</h4>
                         </Link>
-
                         <Form {...form}>
                             <form
                                 // onSubmit={form.handleSubmit(onSubmit)}
-                                className="mt-3 flex flex-col justify-start gap-2"
+                                className="mt-1 flex flex-col justify-start gap-2"
                             >
                                 <FormField
                                     control={form.control}
                                     name="thread"
                                     render={({ field }) => (
                                         <FormItem className=' flex flex-col gap-2 w-full' >
-                                            <FormControl className=' no-focus bg-transparent border-none text-light-1' >
+                                            <FormControl className=' no-focus bg-transparent border-none text-small-regular text-light-2' >
                                                 <textarea
                                                     ref={textAreaRef}
                                                     autoFocus
@@ -223,7 +211,7 @@ const PostThread = ({
                                                     onChange={(e: any) => handleThread(e, field.onChange)}
                                                     rows={1}
                                                     className=" border-none outline-none resize-none"
-                                                    placeholder="Start a thread..."
+                                                    placeholder={`${ threadId ? 'Reply' : 'Start'} a thread...`}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -235,7 +223,7 @@ const PostThread = ({
                                         <div className=" mt-2">
                                             <input accept="image/*" multiple className=' hidden' id="icon-button-file" type="file" onChange={uploadMultipleFiles} />
                                             <label htmlFor="icon-button-file" className=" text-gray-1 cursor-pointer">
-                                                <Camera />
+                                                <Camera strokeWidth={'1.25'} size={24} />
                                             </label>
                                         </div>
                                     }
@@ -262,10 +250,10 @@ const PostThread = ({
                                 <ThreadFilesViewer Files={multipleFile} action={removeFile} />
                             </form>
                         </Form>
-
                     </div>
                 </div>
             </div>
+
         </article>
     )
 }

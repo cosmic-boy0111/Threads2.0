@@ -45,7 +45,7 @@ const ThreadCard = ({
                         </div>
                     </div>
                     <div className=' flex w-full flex-col' >
-                        <h4 className=' cursor-pointer text-medium-regular text-gray-1' >{userSecondId.toString() === repostedBy.id.toString() ? 'You' : repostedBy.username} reposted</h4>
+                        <h4 className=' cursor-pointer text-medium-regular text-gray-1' >{userSecondId.toString() === repostedBy.id.toString() ? 'You' : repostedBy.name} reposted</h4>
                     </div>
                 </div>
             }
@@ -65,7 +65,7 @@ const ThreadCard = ({
                     </div>
                     <div className=' flex w-full flex-col' >
                         <Link href={`/profile/${author.id}`} className=' w-fit' >
-                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
+                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.name}</h4>
                         </Link>
                         <p className=' mt-1 text-small-regular text-light-2' >
                             {content}

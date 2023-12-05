@@ -19,7 +19,7 @@ const page = async () => {
             Create Thread
         </h1>
         {/* <PostThread userId={userInfo._id.toString()} /> */}
-        <PostThread currentUser={user} />
+        <PostThread author={userInfo} />
     </>
   )
 }

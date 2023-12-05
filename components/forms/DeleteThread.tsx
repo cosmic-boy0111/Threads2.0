@@ -34,7 +34,7 @@ function DeleteThread({
       className='cursor-pointer object-contain'
       onClick={async () => {
         await Api._thread._deleteThread(JSON.parse(threadId), pathname, parentId);
-        if (!parentId || !isComment) {
+        if ((!parentId || !isComment) && !pathname.includes('profile')) {
           router.push("/");
         }
       }}
