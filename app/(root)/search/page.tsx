@@ -32,12 +32,12 @@ const page = async ({
 
     return (
         <section>
-            <h1 className=" head-text mb-10 hidden sm:hidden md:block" > Search </h1>
+            <h1 className=" head-text md:mb-10 sm:mb-5" > Search </h1>
 
             {/* // Todo : search bar */}
             <Searchbar routeType="search" />
 
-            <div className=" mt-14 flex flex-col gap-9">
+            <div className=" mt-5 flex flex-col gap-5">
                 {result.users.length === 0 ? (
                     <p className=" no-result" >No Usres</p>
                 ) : (

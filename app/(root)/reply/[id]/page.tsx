@@ -34,6 +34,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                     userSecondId={userInfo._id}
                     authorId={thread.author._id}
                     repostedBy={thread.repostedBy}
+                    page={'reply'}
                 />
                 <PostThread author={userInfo} threadId={thread._id} />
             </div>

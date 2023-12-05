@@ -31,7 +31,8 @@ const ThreadCard = ({
     userSecondId,
     authorId,
     repostedBy,
-    repostThreadId
+    repostThreadId,
+    page
 }: _IthreadCard) => {
 
     return (
@@ -71,7 +72,7 @@ const ThreadCard = ({
                             {content}
                         </p>
                         <ThreadFilesViewer Files={files} />
-                        <div className={`${isComment && 'mb-10'} mt-1 flex flex-col gap-3 relative`}>
+                        <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-3 relative`}>
                             <div className=' flex gap-3.5'>
                                 <TooltipProvider>
                                     <Tooltip>
@@ -171,15 +172,15 @@ const ThreadCard = ({
                 }
             </div>
             {!isComment && comments.length > 0 && (
-                <div className='ml-1 mt-3 flex items-center gap-2'>
+                <div className={`${page === 'reply' && 'max-sm:hidden'} ml-1 mt-3 flex items-center gap-2`}>
                     {comments.slice(0, 2).map((comment, index) => (
                         <Image
                             key={index}
                             src={comment.author.image}
                             alt={`user_${index}`}
-                            width={24 - index}
-                            height={24 - index}
-                            className={`${index !== 0 && "-ml-5"} rounded-full object-cover`}
+                            width={20}
+                            height={20}
+                            className={`${index !== 0 && "-ml-4"} rounded-full object-cover`}
                         />
                     ))}
 
@@ -192,7 +193,7 @@ const ThreadCard = ({
                     <div className=' flex h-2 w-9 justify-end' >
                     </div>
                 </div>
-                <div className=' flex w-full flex-col' >
+                <div className={`${page === 'reply' && 'max-sm:hidden'} flex w-full flex-col`} >
                     {!isComment && community && (
                         <Link href={`/communities/${community.id}`} className=' mt-1 flex items-center'>
                             <p className=' text-subtle-medium text-gray-1'>
@@ -218,7 +219,7 @@ const ThreadCard = ({
                 </div>
             </div>
 
-            <div className='border-y border-y-dark-2 my-3 md:hidden' />
+            <div className={`${page === 'reply' && 'max-sm:hidden'} border-y border-y-dark-2 my-3 md:hidden`} />
         </article>
     )
 }

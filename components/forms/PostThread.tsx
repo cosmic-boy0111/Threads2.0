@@ -253,7 +253,7 @@ const PostThread = ({
                     </div>
                 </div>
             </div>
-
+            
         </article>
     )
 }

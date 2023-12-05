@@ -32,8 +32,8 @@ function Searchbar({ routeType }: Props) {
       <Image
         src='/assets/search-gray.svg'
         alt='search'
-        width={24}
-        height={24}
+        width={23}
+        height={23}
         className='object-contain'
       />
       <Input

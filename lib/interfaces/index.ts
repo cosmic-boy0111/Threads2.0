@@ -55,7 +55,8 @@ export interface _IthreadCard {
         name : string,
         username : string,
     } | undefined | null,
-    repostThreadId? : string 
+    repostThreadId? : string,
+    page? : string,
 }
 
 export interface _Icomment {
