@@ -28,7 +28,7 @@ const page = async ({params} : { params : { id : string }}) => {
                 type="Community"
            /> 
 
-           <div className=" mt-9">
+           <div className=" mt-3">
                 <Tabs defaultValue="threads" className=" w-full">
                     <TabsList className="tab">
                         {

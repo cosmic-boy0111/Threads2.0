@@ -97,6 +97,23 @@ async function fetchAllChildThreads(threadId: string): Promise<any[]> {
     return descendantThreads;
 }
 
+
+// async function deleteReferencesFromUsers(threadId: string) {
+//     const mainThread = await Thread.findById(threadId);
+//     if(!mainThread) return;
+
+//     await User.updateMany(
+//         { _id: { $in: mainThread.reposters } },
+//         { $pull: { reposts: { $in: mainThread.reposts } } }
+//     );
+
+//     for (const childThreadId of mainThread.children) {    
+//         await deleteReferencesFromUsers(childThreadId);
+//     }
+
+// }
+
+
 export async function deleteThread(id: string, path: string, parentId : string | null): Promise<void> {
     try {
         connectToDB();
@@ -285,6 +302,13 @@ export const repostThread = async ({
             referenceThread : referenceThread
         })
         
+        // const user = await User.findById(repostedBy);
+        // if(user.reposts){
+        //     user.reposts.push(repostThread._id)
+        // }
+
+        // await user.save();
+
         if(originalThread.reposts){
             originalThread.reposts.push(repostThread._id);
         }

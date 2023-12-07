@@ -21,10 +21,11 @@ const RepostThreadCard = async (
         isComment?:boolean 
 }) => {
 
+    if(userSecondId.toString() === repostedBy.toString()) return;
+
     const thread = await Api._thread._fetchThreadById(referenceThread);
     const user = await Api._user._fetchUserBy_id(repostedBy);
     console.log(thread, userSecondId, user._id);
-
 
     return (
         <ThreadCard

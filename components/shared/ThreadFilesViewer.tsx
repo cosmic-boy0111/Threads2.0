@@ -20,7 +20,7 @@ const ThreadFilesViewer = (
                         <div className=" relative h-auto inline-block mr-2">
                             {
                                 file.type.includes('image') ?
-                                    <img className={`object-cover sm:w-auto ${ Files.length === 1 ? 'md:max-w-md' : 'md:w-auto'}  ${Files.length === 1 ? 'h-auto' : ' h-44 sm:h-44 xs:h-44 md:h-64 xl:h-64'} rounded-md `} src={file.url} alt="..." /> :
+                                    <img className={`object-cover sm:w-auto ${ Files.length === 1 ? 'md:w-auto md:h-96' : 'md:w-auto'}  ${Files.length === 1 ? 'h-auto' : ' h-44 sm:h-44 xs:h-44 md:h-64 xl:h-64'} rounded-md `} src={file.url} alt="..." /> :
                                     <video className={`object-cover w-auto  ${Files.length === 1 ? 'h-auto' : 'h-44 sm:h-44 xs:h-44 md:h-64 xl:h-64'} rounded-md `} playsInline={true} preload='auto' autoPlay={true} loop={true} muted={true}>
                                         <source src={file.url} />
                                     </video>
