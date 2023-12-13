@@ -239,7 +239,7 @@ const PostThread = ({
 
                                         {/* This div is for small devices */}
                                         <div className="md:hidden fixed bottom-5 right-5 flex items-center gap-4">
-                                            <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div>
+                                            {/* <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div> */}
                                             <Button type="submit" onClick={onSubmit} className=" bg-primary-500" disabled={tempThread.length < 3}>
                                                 Post
                                             </Button>
@@ -251,6 +251,12 @@ const PostThread = ({
                             </form>
                         </Form>
                     </div>
+                </div>
+                {/* here */}
+                <div className="md:hidden flex items-center">
+                    {tempThread.length >= 3 && 
+                        <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div>
+                    }
                 </div>
             </div>
             

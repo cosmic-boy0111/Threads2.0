@@ -18,7 +18,7 @@ const Home =  async ({
 
   const result = await Api._thread._fetchPosts(
     searchParams.page ? +searchParams.page : 1,
-    searchParams.page ? parseInt(searchParams.page) * 10 : 10 
+    30
   );
 
 

@@ -98,20 +98,20 @@ async function fetchAllChildThreads(threadId: string): Promise<any[]> {
 }
 
 
-// async function deleteReferencesFromUsers(threadId: string) {
-//     const mainThread = await Thread.findById(threadId);
-//     if(!mainThread) return;
+async function deleteRepostReferencesFromUsers(threadId: string) {
+    const mainThread = await Thread.findById(threadId);
+    if(!mainThread) return;
 
-//     await User.updateMany(
-//         { _id: { $in: mainThread.reposters } },
-//         { $pull: { reposts: { $in: mainThread.reposts } } }
-//     );
+    await User.updateMany(
+        { _id: { $in: mainThread.reposters } },
+        { $pullAll: { reposts: mainThread.reposts } }
+    );
 
-//     for (const childThreadId of mainThread.children) {    
-//         await deleteReferencesFromUsers(childThreadId);
-//     }
+    for (const childThreadId of mainThread.children) {    
+        await deleteRepostReferencesFromUsers(childThreadId);
+    }
 
-// }
+}
 
 
 export async function deleteThread(id: string, path: string, parentId : string | null): Promise<void> {
@@ -171,14 +171,19 @@ export async function deleteThread(id: string, path: string, parentId : string |
             ].filter((id) => id !== undefined)
         );
 
+        // delet reposts from each user 
+        await deleteRepostReferencesFromUsers(id);
+        
         // Recursively delete child threads and their descendants
         await Thread.deleteMany({ _id: { $in: descendantThreadIds } });
+        
 
         // Update User model
         await User.updateMany(
             { _id: { $in: Array.from(uniqueAuthorIds) } },
             { $pull: { threads: { $in: descendantThreadIds } } }
         );
+
 
         // Update Community model
         await Community.updateMany(
@@ -302,12 +307,12 @@ export const repostThread = async ({
             referenceThread : referenceThread
         })
         
-        // const user = await User.findById(repostedBy);
-        // if(user.reposts){
-        //     user.reposts.push(repostThread._id)
-        // }
+        const user = await User.findById(repostedBy);
+        if(user.reposts){
+            user.reposts.push(repostThread._id)
+        }
 
-        // await user.save();
+        await user.save();
 
         if(originalThread.reposts){
             originalThread.reposts.push(repostThread._id);
@@ -360,6 +365,13 @@ export const removeRepostThread = async ({
                     repostedBy : currentUserId,
                     referenceThread : mainThread
                 });
+
+        const user = await User.findById(currentUserId);
+        if(user.reposts){
+            user.reposts = user.reposts.filter((id : Schema.Types.ObjectId) => id.toString() !== repostThread._id.toString());
+        }
+        
+        await user.save();
 
         if(repostThread.repostedBy.toString() !== currentUserId.toString()){
             throw new Error("user not match");
