@@ -48,6 +48,8 @@ export interface _IthreadCard {
     }[],
     isComment? : boolean,
     isReposted : boolean,
+    isLike : boolean,
+    likesCount : number,
     userSecondId : string,
     authorId : string,
     repostedBy : {
@@ -120,5 +122,11 @@ export interface _IrepostDelete {
     currentUserId : string,
     mainThreadId : string,
     repostThreadId : string | null | undefined,
+    path : string
+}
+
+export interface _Ilike {
+    userId : string,
+    threadId : string,
     path : string
 }

@@ -9,11 +9,13 @@ import {
     deleteThread, 
     fetchPosts, 
     fetchThreadById, 
+    likeThread, 
+    removeLikeThread, 
     removeRepostThread, 
     repostThread
 } from "./actions/thread.actions";
 import { fetchUser, fetchUserBy_id, fetchUserPosts, fetchUsers, getActivity, getReplies, updateUser } from "./actions/user.actions"
-import { _IcommentToThread, _Icommunity, _Irepost, _IrepostDelete, _Ithread, _Iuser, _Iusers } from "./interfaces";
+import { _IcommentToThread, _Icommunity, _Ilike, _Irepost, _IrepostDelete, _Ithread, _Iuser, _Iusers } from "./interfaces";
 
 class User {
     _updateUser = (data : _Iuser) => updateUser(data);
@@ -33,6 +35,8 @@ class Thread {
     _deleteThread = (id: string, path: string, parentId : string | null) => deleteThread(id, path, parentId);
     _repostThread = (data : _Irepost) => repostThread(data);
     _removeRepostThread = (data : _IrepostDelete) => removeRepostThread(data);
+    _likeThread = (data : _Ilike) => likeThread(data);
+    _removeLikeThread = (data : _Ilike) => removeLikeThread(data);
 }
 
 class Community {

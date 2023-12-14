@@ -28,6 +28,12 @@ const threadsSchema = new Schema({
             ref : 'User',   
         }
     ],
+    likes : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'User',   
+        }
+    ],
     repostedBy : {
         type : Schema.Types.ObjectId,
         ref : 'User',

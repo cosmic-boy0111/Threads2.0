@@ -31,6 +31,8 @@ const page = async ({ params }: { params: { id: string } }) => {
                     createdAt={thread.createdAt}
                     comments={thread.children}
                     isReposted={thread.reposters ? thread.reposters.includes(userInfo._id) : false}
+                    isLike={thread.likes ? thread.likes.includes(userInfo._id) : false}
+                    likesCount={thread.likes ? thread.likes.length : 0}
                     userSecondId={userInfo._id}
                     authorId={thread.author._id}
                     repostedBy={thread.repostedBy}

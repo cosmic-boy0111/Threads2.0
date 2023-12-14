@@ -7,7 +7,7 @@ import { connectToDB } from "../mongoose";
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
 import Community from "../models/community.model";
-import { _IcommentToThread, _Irepost, _IrepostDelete, _Ithread } from "../interfaces";
+import { _IcommentToThread, _Ilike, _Irepost, _IrepostDelete, _Ithread } from "../interfaces";
 import { Schema } from "mongoose";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
@@ -98,7 +98,7 @@ async function fetchAllChildThreads(threadId: string): Promise<any[]> {
 }
 
 
-async function deleteRepostReferencesFromUsers(threadId: string) {
+async function deleteRepostReferencesAndLikeThreadsFromUsers(threadId: string) {
     const mainThread = await Thread.findById(threadId);
     if(!mainThread) return;
 
@@ -107,8 +107,13 @@ async function deleteRepostReferencesFromUsers(threadId: string) {
         { $pullAll: { reposts: mainThread.reposts } }
     );
 
+    await User.updateMany(
+        { _id: { $in: mainThread.likes } },
+        { $pull: { likeThreads: mainThread._id } }
+    );
+    
     for (const childThreadId of mainThread.children) {    
-        await deleteRepostReferencesFromUsers(childThreadId);
+        await deleteRepostReferencesAndLikeThreadsFromUsers(childThreadId);
     }
 
 }
@@ -171,8 +176,8 @@ export async function deleteThread(id: string, path: string, parentId : string |
             ].filter((id) => id !== undefined)
         );
 
-        // delet reposts from each user 
-        await deleteRepostReferencesFromUsers(id);
+        // delet reposts and likes from each user 
+        await deleteRepostReferencesAndLikeThreadsFromUsers(id);
         
         // Recursively delete child threads and their descendants
         await Thread.deleteMany({ _id: { $in: descendantThreadIds } });
@@ -393,5 +398,64 @@ export const removeRepostThread = async ({
     } catch (error : any) {
         console.error("Error while repost delete:", error.message);
         throw new Error("Unable to repost delete");
+    }
+}
+
+export const likeThread = async ({
+    userId,
+    threadId,
+    path
+} : _Ilike) => {
+    try {
+        
+        await connectToDB();
+
+        const thread = await Thread.findById(threadId);
+        const user = await User.findById(userId);
+        if(thread.likes){
+            thread.likes.push(user._id);
+        }
+        if(user.likeThreads){
+            user.likeThreads.push(thread._id);
+        }
+
+        await thread.save();
+        await user.save();
+
+        revalidatePath(path)
+
+    } catch (error : any) {
+        console.log(' Error while repost like thread : ', error.message);
+        
+    }
+}
+
+
+export const removeLikeThread = async ({
+    userId,
+    threadId,
+    path
+} : _Ilike ) => {
+    try {
+        
+        await connectToDB();
+
+        const thread = await Thread.findById(threadId);
+        const user = await User.findById(userId);
+        if(thread.likes){
+            thread.likes = thread.likes.filter((id : Schema.Types.ObjectId) => id.toString() !== user._id.toString());
+        }
+        if(user.likeThreads){
+            user.likeThreads = user.likeThreads.filter((id : Schema.Types.ObjectId) => id.toString() !== thread._id.toString());
+        }
+
+        await thread.save();
+        await user.save();
+
+        revalidatePath(path)
+
+    } catch (error : any) {
+        console.log(' Error while repost like thread : ', error.message);
+        
     }
 }

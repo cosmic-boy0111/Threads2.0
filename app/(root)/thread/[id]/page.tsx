@@ -1,4 +1,5 @@
 import RepostThreadCard from "@/components/cards/RepostThreadCard";
+import SelectedThread from "@/components/cards/SelectedThread";
 import ThreadCard from "@/components/cards/ThreadCard";
 import Comment from "@/components/forms/Comment";
 import { Api } from "@/lib/api";
@@ -22,15 +23,8 @@ const page = async ({ params }: { params: { id: string } }) => {
     
     return (
         <section className=" relative" >
-            {/* <Head>
-                <meta property="og:title" content={`${thread.author.name} (@${thread.author.usrename}) on Threads`} />
-                <meta property="og:description" content={`${thread.text.slice(0,25)}...`} />
-                <meta property="og:image" content={thread.files ? thread.files[0].url : ''} />
-                <meta property="og:url" content={`http://localhost:3000/thread/${params.id}`} />
-
-            </Head> */}
             <div>
-                <ThreadCard
+                <SelectedThread
                     key={thread._id}
                     id={thread._id}
                     currentUserId={user?.id || ""}
@@ -42,16 +36,18 @@ const page = async ({ params }: { params: { id: string } }) => {
                     createdAt={thread.createdAt}
                     comments={thread.children}
                     isReposted={thread.reposters ? thread.reposters.includes(userInfo._id) : false}
+                    isLike={thread.likes ? thread.likes.includes(userInfo._id) : false}
+                    likesCount={thread.likes ? thread.likes.length : 0}
                     userSecondId={userInfo._id}
                     authorId={thread.author._id}
                     repostedBy={thread.repostedBy}
                 />
             </div>
-            <p className=" text-light-1 mt-6 text-center" > {
+            {/* <p className=" text-light-1 mt-3 text-center" > {
                 thread.children.length === 0 ? '' :
                 thread.children.length === 1 ? 'Reply'  : 'Replies'
-            } </p>
-            <div className=" mt-3">
+            } </p> */}
+            <div className=" sm:mt-3 md:mt-10 flex flex-col sm:gap-1 md:gap-10">
                 {thread.children.map((childItem : any) => {
                     return  childItem.repostedBy ? 
                     <RepostThreadCard 
@@ -60,7 +56,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                         currentUserId={user?.id || ""} 
                         userSecondId={userInfo._id} 
                         repostedBy={childItem.repostedBy}
-                        isComment={true}
+                        // isComment={false}
                     /> 
                         :
                     <ThreadCard
@@ -74,8 +70,10 @@ const page = async ({ params }: { params: { id: string } }) => {
                                 community={childItem.community}
                                 createdAt={childItem.createdAt}
                                 comments={childItem.children}
-                                isComment={true}
+                                // isComment={false}
                                 isReposted={childItem.reposters ? childItem.reposters.includes(userInfo._id) : false}
+                                isLike={childItem.likes ? childItem.likes.includes(userInfo._id) : false}
+                                likesCount={childItem.likes ? childItem.likes.length : 0}
                                 userSecondId={userInfo._id}
                                 authorId={childItem.author._id}
                                 repostedBy={childItem.repostedBy}

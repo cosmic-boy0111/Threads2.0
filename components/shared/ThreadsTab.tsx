@@ -44,8 +44,8 @@ const ThreadsTab = async ({
                     content={thread.text}
                     author={
                         accountType === "User" 
-                            ? {name : result.name,image : result.image,id : result.id} 
-                            : {name : thread.author.name,image : thread.author.image,id : thread.author.id}
+                            ? {name : result.name, username : result.username ,image : result.image,id : result.id} 
+                            : {name : thread.author.name, username : thread.author.username ,image : thread.author.image,id : thread.author.id}
                     } // todo
                     files={thread.files || []}
                     community={
@@ -56,6 +56,8 @@ const ThreadsTab = async ({
                     createdAt={thread.createdAt}
                     comments={thread.children}
                     isReposted={false}
+                    isLike={thread.likes ? thread.likes.includes(userInfo._id) : false}
+                    likesCount={thread.likes ? thread.likes.length : 0}
                     userSecondId={userInfo._id}
                     authorId={thread.author._id}
                     repostedBy={thread.repostedBy}

@@ -15,7 +15,13 @@ const userSchema = new Schema({
     reposts : [
         {
             type : Schema.Types.ObjectId,
-            ref : 'User'
+            ref : 'Threads'
+        }
+    ],
+    likeThreads : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'Threads'
         }
     ],
     onboarded : { type : Boolean, default : false },
