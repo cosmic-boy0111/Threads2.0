@@ -67,7 +67,7 @@ const RepostThread = ({
 
     return (
         <div onClick={() => isReposted ? removeRepost() : addRepost()}>
-            <Repeat size={24} strokeWidth={'1.25'} className={ isReposted ? `text-primary-500` : `text-light-4`} /> 
+            <Repeat size={21} strokeWidth={'1.25'} className={ isReposted ? `text-primary-500` : `text-light-4`} /> 
         </div>
     )
 }

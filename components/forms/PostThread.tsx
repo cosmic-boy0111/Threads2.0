@@ -47,6 +47,7 @@ const PostThread = ({
     const { organization } = useOrganization();
     const { startUpload } = useUploadThing("thread");
     const textAreaRef = useRef<any>(null)
+    const containerRef = useRef<any>(null);
     const [tempThread, setTempThread] = useState<string>('')
     // const [author, setAuthor] = useState<any>({})
     const [url, setUrl] = useState<string>('')
@@ -89,6 +90,7 @@ const PostThread = ({
         }
         console.log(multipleFileArray);
         setMultipleFile(multipleFileArray);
+        e.target.value = "";
     };
 
     const handleThread = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) => {
@@ -103,7 +105,15 @@ const PostThread = ({
         textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
     };
 
+    const scrollToBottom = () => {
+        const container = containerRef.current;
+        if (container && multipleFile.length === 0) {
+          container.scrollTop = container.scrollHeight;
+        }
+    };
+
     useEffect(resizeTextArea, [tempThread]);
+    useEffect(scrollToBottom, [tempThread]);
 
     const handleReset = () => {
         form.resetField('thread')
@@ -175,7 +185,7 @@ const PostThread = ({
 
     return (
         <article className={`flex w-full flex-col rounded-xl md:bg-dark-2 md:p-7 sm:bg-none sm:p-0 sm:mt-0 md:mt-10 lg:mt-10`} >
-            <div className=" flex items-start justify-between">
+            <div ref={containerRef} className=" flex items-start justify-between max-sm:max-h-[86vh] max-sm:overflow-y-scroll">
                 <div className=" flex w-full flex-1 flex-row gap-4">
 
                     <div className=" flex flex-col items-center">
@@ -190,13 +200,20 @@ const PostThread = ({
                         <div className=' thread-card_bar' />
                     </div>
                     <div className=' flex w-full flex-col' >
-                        <Link href={`/profile/${author.id}`} className=' w-fit' >
-                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.name}</h4>
-                        </Link>
+                        <div className=" flex justify-between">
+
+                            <Link href={`/profile/${author.id}`} className=' w-fit' >
+                                <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.name}</h4>
+                            </Link>
+                            <div className="md:hidden flex items-center">
+                                <div className={` text-gray-1 cursor-pointer ${tempThread.length > 0 || multipleFile.length > 0 ? 'visible' : 'hidden'}`} onClick={handleReset}><X size={17} /></div>
+
+                            </div>
+                        </div>
                         <Form {...form}>
                             <form
                                 // onSubmit={form.handleSubmit(onSubmit)}
-                                className="mt-1 flex flex-col justify-start gap-2"
+                                className="mt-1 flex flex-col justify-start gap-1"
                             >
                                 <FormField
                                     control={form.control}
@@ -211,7 +228,7 @@ const PostThread = ({
                                                     onChange={(e: any) => handleThread(e, field.onChange)}
                                                     rows={1}
                                                     className=" border-none outline-none resize-none"
-                                                    placeholder={`${ threadId ? 'Reply' : 'Start'} a thread...`}
+                                                    placeholder={`${threadId ? 'Reply' : 'Start'} a thread...`}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -222,7 +239,7 @@ const PostThread = ({
                                     {multipleFile.length === 0 &&
                                         <div className=" mt-2">
                                             <input accept="image/*" multiple className=' hidden' id="icon-button-file" type="file" onChange={uploadMultipleFiles} />
-                                            <label htmlFor="icon-button-file" className=" text-gray-1 cursor-pointer">
+                                            <label htmlFor="icon-button-file" className={` text-gray-1 cursor-pointer ${multipleFile.length !== 0 ? 'hidden' : 'visible'} `}>
                                                 <Camera strokeWidth={'1.25'} size={24} />
                                             </label>
                                         </div>
@@ -232,20 +249,20 @@ const PostThread = ({
                                         {/* This div is for medium and larger devices */}
                                         <div className="hidden md:flex md:mr-4 md:items-center md:gap-4">
                                             <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div>
-                                            <Button type="submit" onClick={onSubmit} className="bg-primary-500" disabled={tempThread.length < 3}>
+                                            <Button type="submit" onClick={onSubmit} className="bg-primary-500" disabled={tempThread.length === 0 && multipleFile.length === 0}>
                                                 Post
                                             </Button>
                                         </div>
 
                                         {/* This div is for small devices */}
-                                        <div className="md:hidden fixed bottom-5 right-5 flex items-center gap-4">
-                                            {/* <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div> */}
-                                            <Button type="submit" onClick={onSubmit} className=" bg-primary-500" disabled={tempThread.length < 3}>
-                                                Post
-                                            </Button>
-                                        </div>
 
                                     </div>
+                                </div>
+                                <div className="md:hidden fixed bottom-3 right-3 flex items-center gap-4">
+                                    {/* <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div> */}
+                                    <Button type="submit" onClick={onSubmit} className=" bg-primary-500" disabled={tempThread.length === 0 && multipleFile.length === 0}>
+                                        Post
+                                    </Button>
                                 </div>
                                 <ThreadFilesViewer Files={multipleFile} action={removeFile} />
                             </form>
@@ -253,13 +270,12 @@ const PostThread = ({
                     </div>
                 </div>
                 {/* here */}
-                <div className="md:hidden flex items-center">
-                    {tempThread.length >= 3 && 
-                        <div className=" text-gray-1 cursor-pointer" onClick={handleReset}><X size={17} /></div>
-                    }
-                </div>
+                {/* <div className="md:hidden flex items-center">
+                        <div className={` text-gray-1 cursor-pointer ${tempThread.length >= 3 ? 'visible' : 'hidden'}`} onClick={handleReset}><X size={17} /></div>
+                    
+                </div> */}
             </div>
-            
+
         </article>
     )
 }
