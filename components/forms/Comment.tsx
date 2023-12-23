@@ -37,14 +37,14 @@ const Comment = ({
     });
 
     const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-        await Api._thread._addCommentToThread({
-            threadId : threadId,
-            commentText : values.thread,
-            userId : JSON.parse(currentUserId),
-            path : pathname,
-        })
+        // await Api._thread._addCommentToThread({
+        //     threadId : threadId,
+        //     commentText : values.thread,
+        //     userId : JSON.parse(currentUserId),
+        //     path : pathname,
+        // })
 
-        form.reset();
+        // form.reset();
     }
 
     return (

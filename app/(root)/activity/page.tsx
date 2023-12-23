@@ -17,9 +17,9 @@ const page = async () => {
 
   return (
     <section>
-      <h1 className=" head-text mb-10" > Activity </h1>
+      <h1 className=" head-text md:mb-10 sm:mb-6" > Activity </h1>
 
-      <section className=" mt-10 flex flex-col gap-5">
+      <section className=" md:mt-10 sm:mt-5 flex flex-col gap-5">
         { activity.length > 0 ? (
           <>
             {activity.map((activity) => (

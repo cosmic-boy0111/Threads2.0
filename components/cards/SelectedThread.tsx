@@ -17,7 +17,7 @@ import { Repeat, Repeat1 } from 'lucide-react'
 import RepostThread from '../forms/RepostThread'
 import LikeThread from '../forms/LikeThread'
 
-const ThreadCard = ({
+const SelectedThread = ({
     id,
     currentUserId,
     parentId,
@@ -53,8 +53,8 @@ const ThreadCard = ({
                     </div>
                 </div>
             }
-            <div className=" flex items-start justify-between">
-                <div className=" flex w-full flex-1 flex-row gap-4">
+            <div className=" flex items-center justify-between">
+                <div className=" flex items-center w-full flex-1 flex-row gap-4">
 
                     <div className=" flex flex-col items-center">
                         <Link href={`/profile/${author.id}`} className=' relative h-9 w-9' >
@@ -65,18 +65,30 @@ const ThreadCard = ({
                                 className=' cursor-pointer rounded-full'
                             />
                         </Link>
-                        <div className=' thread-card_bar' />
                     </div>
                     <div className=' flex w-full flex-col' >
                         <Link href={`/profile/${author.id}`} className=' w-fit' >
                             <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
                         </Link>
-                        <Link href={`/thread/${id}`} >
+                    </div>
 
+                </div>
+                
+                {
+                    !repostedBy &&
+                    <DeleteThread
+                        threadId={JSON.stringify(id)}
+                        currentUserId={currentUserId}
+                        authorId={author.id}
+                        parentId={parentId}
+                        isComment={isComment}
+                    />
+                }
+            </div>
+            <div className=' flex w-full flex-col' >
                         <p className=' mt-1 text-small-regular text-light-2' >
                             {content}
                         </p>
-                        </Link>
                         <ThreadFilesViewer Files={files} />
                         <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-3 relative`}>
                             <div className=' flex gap-3.5'>
@@ -140,35 +152,9 @@ const ThreadCard = ({
                                 </TooltipProvider>
 
                             </div>
+                            
+                            
                             <div className='flex gap-2'>
-                                {isComment && comments.length > 0 && (
-                                    <Link href={`/thread/${id}`}>
-                                        <p className=' mt-1 text-su text-light-2' >{comments.length} repl{comments.length > 1 ? "ies" : "y"}</p>
-                                    </Link>
-                                )}
-                                {isComment && likesCount > 0 && (
-                                        <span className='mt-1 text-su text-light-2 relative bottom-1'>
-                                            .
-                                        </span>
-                                )}
-
-                                {isComment && likesCount > 0 && (
-                                    <div>
-                                        <p className='mt-1 text-su text-light-2'>
-                                            {likesCount} like{likesCount > 1 ? "s" : ""}
-                                        </p>
-                                    </div>
-                                )}
-
-                            </div>
-                            {!community && isComment && (
-                                <div className=' mt-1 flex items-center'>
-                                    <p className=' text-small-regular text-gray-1'>
-                                        {formatDateString(createdAt)}
-                                    </p>
-                                </div>
-                            )}
-                            <div className=' absolute -bottom-8 flex gap-2'>
 
                                 {!isComment && comments.length > 0 && (
                                     <Link href={`/thread/${id}`} >
@@ -197,41 +183,10 @@ const ThreadCard = ({
                         </div>
 
                     </div>
-
-                </div>
-                {
-                    !repostedBy &&
-                    <DeleteThread
-                        threadId={JSON.stringify(id)}
-                        currentUserId={currentUserId}
-                        authorId={author.id}
-                        parentId={parentId}
-                        isComment={isComment}
-                    />
-                }
-            </div>
-            {!isComment && comments.length > 0 && (
-                <div className={`${page === 'reply' && 'max-sm:hidden'} ml-1 mt-3 flex items-center gap-2`}>
-                    {comments.slice(0, 2).map((comment, index) => (
-                        <Image
-                            key={index}
-                            src={comment.author.image}
-                            alt={`user_${index}`}
-                            width={20}
-                            height={20}
-                            className={`${index !== 0 && "-ml-4"} rounded-full object-cover`}
-                        />
-                    ))}
-
-
-                </div>
-            )}
+           
             <div className=" flex w-full flex-1 flex-row gap-4">
 
-                <div className=" flex flex-col items-end justify-end">
-                    <div className=' flex h-2 w-9 justify-end' >
-                    </div>
-                </div>
+                
                 <div className={`${page === 'reply' && 'max-sm:hidden'} flex w-full flex-col`} >
                     {!isComment && community && (
                         <Link href={`/communities/${community.id}`} className=' mt-1 flex items-center'>
@@ -263,4 +218,4 @@ const ThreadCard = ({
     )
 }
 
-export default ThreadCard
+export default SelectedThread

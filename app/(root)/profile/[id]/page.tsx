@@ -26,7 +26,7 @@ const page = async ({params} : { params : { id : string }}) => {
                 bio={userInfo.bio}
            /> 
 
-           <div className=" mt-9">
+           <div className=" mt-3">
                 <Tabs defaultValue="threads" className=" w-full">
                     <TabsList className="tab">
                         {
@@ -35,16 +35,16 @@ const page = async ({params} : { params : { id : string }}) => {
                                     <Image 
                                         src={tab.icon}
                                         alt={tab.label}
-                                        width={24}
-                                        height={24}
-                                        className=" object-contain"
+                                        width={23}
+                                        height={23}
+                                        className="max-sm:hidden object-contain"
                                     />
-                                    <p  className=" max-sm:hidden">{tab.label}</p>
-                                    {tab.label === "Threads" && (
-                                        <p className=" ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
+                                    <p  className=" text-small-regular">{tab.label}</p>
+                                    {/* {tab.label === "Threads" && (
+                                        <p className=" rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
                                             {userInfo?.threads?.length}
                                         </p>
-                                    )}
+                                    )} */}
                                 </TabsTrigger>
                             ))
                         }
@@ -63,7 +63,7 @@ const page = async ({params} : { params : { id : string }}) => {
                             accountType="Replies"
                         />
                     </TabsContent>
-                    <TabsContent value={'tagged'} className=" w-full text-light-1">
+                    <TabsContent value={'reposts'} className=" w-full text-light-1">
                         <ThreadsTab 
                             currentUserId={user.id}
                             accountId={userInfo.id}

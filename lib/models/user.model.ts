@@ -1,4 +1,4 @@
-import {Schema, model, models} from "mongoose";
+import {Schema, deleteModel, model, models} from "mongoose";
 
 const userSchema = new Schema({
     id : { type : String, require : true},
@@ -12,6 +12,18 @@ const userSchema = new Schema({
             ref : 'Threads'
         }
     ],
+    reposts : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'Threads'
+        }
+    ],
+    likeThreads : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'Threads'
+        }
+    ],
     onboarded : { type : Boolean, default : false },
     communities : [
         {
@@ -20,6 +32,8 @@ const userSchema = new Schema({
         }
     ]
 })
+
+if(models.User) deleteModel('User')
 
 const User = models.User || model("User" , userSchema);
 

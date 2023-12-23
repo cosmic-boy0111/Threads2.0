@@ -3,6 +3,7 @@ import { _IthreadCard, _IthreadsTabs } from '@/lib/interfaces'
 import { redirect } from 'next/navigation';
 import React from 'react'
 import ThreadCard from '../cards/ThreadCard';
+import { currentUser } from '@clerk/nextjs';
 
 const ThreadsTab = async ({
     currentUserId,
@@ -11,6 +12,12 @@ const ThreadsTab = async ({
 }: _IthreadsTabs) => {
 
     // Todo : fetch profile threads 
+
+    const user = await currentUser();
+    if(!user) return null;
+
+    const userInfo = await Api._user._fetchUser(user?.id);
+    if(!userInfo?.onboarded) redirect('/onboarding');
 
     let result : any;
     if(accountType === 'Community') {
@@ -27,7 +34,7 @@ const ThreadsTab = async ({
     if(!result) redirect('/')
 
     return (
-        <section className=' mt-9 flex flex-col gap-10' >
+        <section className=' mt-9 flex flex-col sm:gap-1 md:gap-10' >
             {result.threads.map((thread : any) => (
                 <ThreadCard
                     key={thread._id}
@@ -37,9 +44,10 @@ const ThreadsTab = async ({
                     content={thread.text}
                     author={
                         accountType === "User" 
-                            ? {name : result.name,image : result.image,id : result.id} 
-                            : {name : thread.author.name,image : thread.author.image,id : thread.author.id}
+                            ? {name : result.name, username : result.username ,image : result.image,id : result.id} 
+                            : {name : thread.author.name, username : thread.author.username ,image : thread.author.image,id : thread.author.id}
                     } // todo
+                    files={thread.files || []}
                     community={
                         accountType === "Community"
                           ? { name: result.name, id: result.id, image: result.image }
@@ -47,6 +55,12 @@ const ThreadsTab = async ({
                     }
                     createdAt={thread.createdAt}
                     comments={thread.children}
+                    isReposted={false}
+                    isLike={thread.likes ? thread.likes.includes(userInfo._id) : false}
+                    likesCount={thread.likes ? thread.likes.length : 0}
+                    userSecondId={userInfo._id}
+                    authorId={thread.author._id}
+                    repostedBy={thread.repostedBy}
                 />
             ))}
         </section>

@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 
@@ -39,7 +39,7 @@ const UserCard = ({
                 </div>
             </div>
 
-            <Button className='user-card_btn' onClick={() => router.push(`${ personType === 'User' ? '/profile' : '/communities'}/${id}`)}>
+            <Button className='user-card_btn' onClick={() => router.push(`${personType === 'User' ? '/profile' : '/communities'}/${id}`)}>
                 View
             </Button>
         </article>

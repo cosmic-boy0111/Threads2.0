@@ -15,10 +15,11 @@ const page = async () => {
 
   return (
     <>
-        <h1 className='head-text' >
+        <h1 className='head-text hidden sm:hidden md:block' >
             Create Thread
         </h1>
-        <PostThread userId={userInfo._id.toString()} />
+        {/* <PostThread userId={userInfo._id.toString()} /> */}
+        <PostThread author={userInfo} />
     </>
   )
 }

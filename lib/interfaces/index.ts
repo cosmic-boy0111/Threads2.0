@@ -13,6 +13,10 @@ export interface _Ithread {
     text : string,
     author : string,
     communityId : string | null,
+    files : {
+        url : string,
+        type : string
+    }[],
     path : string
 }
 
@@ -22,10 +26,15 @@ export interface _IthreadCard {
     parentId : string | null,
     content : string,
     author : {
+        [x: string]: string | null;
         name : string,
         image : string,
         id : string,
     },
+    files : {
+        url : string,
+        type : string
+    }[],
     community : {
         id : string,
         name : string,
@@ -37,7 +46,19 @@ export interface _IthreadCard {
             image : string,
         }
     }[],
-    isComment? : boolean
+    isComment? : boolean,
+    isReposted : boolean,
+    isLike : boolean,
+    likesCount : number,
+    userSecondId : string,
+    authorId : string,
+    repostedBy : {
+        id : string,
+        name : string,
+        username : string,
+    } | undefined | null,
+    repostThreadId? : string,
+    page? : string,
 }
 
 export interface _Icomment {
@@ -50,6 +71,10 @@ export interface _IcommentToThread {
     threadId : string,
     commentText : string,
     userId : string,
+    files : {
+        url : string,
+        type : string
+    }[],
     path : string
 }
 
@@ -82,4 +107,26 @@ export interface _Icommunity {
     pageNumber? : number,
     pageSize? : number,
     sortBy? : SortOrder,
+}
+
+export interface _Irepost {
+    parentId : string | null,
+    repostedBy : string,
+    referenceThread : string,
+    author : string,
+    path : string,
+}
+
+export interface _IrepostDelete {
+    parentId : string | null,
+    currentUserId : string,
+    mainThreadId : string,
+    repostThreadId : string | null | undefined,
+    path : string
+}
+
+export interface _Ilike {
+    userId : string,
+    threadId : string,
+    path : string
 }

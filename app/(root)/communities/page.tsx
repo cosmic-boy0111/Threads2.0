@@ -32,15 +32,15 @@ const page = async ({
 
     return (
         <section>
-            <h1 className=" head-text mb-10" > Communities </h1>
+            <h1 className=" head-text md:mb-10 sm:mb-5 " > Communities </h1>
 
             {/* // Todo : search bar */}
 
-            <div className='mt-5'>
+            <div className=' md:mt-5 sm:mt-0'>
                 <Searchbar routeType='communities' />
             </div>
 
-            <div className=" mt-14 flex flex-wrap justify-between gap-5">
+            <div className=" mt-5 flex flex-wrap justify-between gap-5">
                 {result.communities.length === 0 ? (
                     <p className=" no-result" >No Usres</p>
                 ) : (

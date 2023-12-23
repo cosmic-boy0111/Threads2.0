@@ -7,13 +7,40 @@ const threadsSchema = new Schema({
         ref : 'User',
         required : true
     },
+    files : [],
     community : {
         type : Schema.Types.ObjectId,
         ref : 'Community',
     },
     createdAt : {
         type : Date,
-        default : new Date(),    
+        default : Date.now,    
+    },
+    reposts : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'Threads'
+        }
+    ],
+    reposters : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'User',   
+        }
+    ],
+    likes : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : 'User',   
+        }
+    ],
+    repostedBy : {
+        type : Schema.Types.ObjectId,
+        ref : 'User',
+    },
+    referenceThread : {
+        type : Schema.Types.ObjectId,
+        ref : 'Threads'
     },
     parentId : {
         type : String,
