@@ -28,7 +28,7 @@ const page = async ({params} : { params : { id : string }}) => {
 
            <div className=" mt-3">
                 <Tabs defaultValue="threads" className=" w-full">
-                    <TabsList className="tab">
+                    <TabsList className="tab sticky top-[54px] max-sm:-top-1 z-30">
                         {
                             profileTabs.map((tab) => (
                                 <TabsTrigger key={tab.label} value={tab.value} className="tab">
@@ -66,8 +66,8 @@ const page = async ({params} : { params : { id : string }}) => {
                     <TabsContent value={'reposts'} className=" w-full text-light-1">
                         <ThreadsTab 
                             currentUserId={user.id}
-                            accountId={userInfo.id}
-                            accountType="User"
+                            accountId={userInfo._id}
+                            accountType="Reposts"
                         />
                     </TabsContent>
                 </Tabs>

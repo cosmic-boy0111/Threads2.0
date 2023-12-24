@@ -40,7 +40,7 @@ const ThreadCard = ({
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'} `} >
-            {repostedBy &&
+            {repostedBy && userSecondId.toString() !== repostedBy.id.toString() &&
                 <div className=" flex w-full flex-1 flex-row gap-4">
 
                     <div className=" flex flex-col items-end justify-end">

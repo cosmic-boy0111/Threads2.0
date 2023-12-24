@@ -9,7 +9,8 @@ const RepostThreadCard = async (
         currentUserId, 
         userSecondId, 
         repostedBy, 
-        isComment 
+        isComment,
+        showUser
     }
         : 
     { 
@@ -18,10 +19,11 @@ const RepostThreadCard = async (
         currentUserId: string, 
         userSecondId: string, 
         repostedBy: string, 
-        isComment?:boolean 
+        isComment?:boolean,
+        showUser?:boolean
 }) => {
 
-    if(userSecondId.toString() === repostedBy.toString()) return;
+    if(userSecondId.toString() === repostedBy.toString() && showUser !== true) return;
 
     const thread = await Api._thread._fetchThreadById(referenceThread);
     const user = await Api._user._fetchUserBy_id(repostedBy);

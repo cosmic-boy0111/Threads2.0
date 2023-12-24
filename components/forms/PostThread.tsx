@@ -137,7 +137,6 @@ const PostThread = ({
 
     const onSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("under submit", files);
         const uploadFileArray: {
             url: string,
             type: string

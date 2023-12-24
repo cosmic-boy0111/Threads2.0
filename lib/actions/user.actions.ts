@@ -7,7 +7,6 @@ import { _Iuser, _Iusers } from "../interfaces";
 import Threads from "../models/thread.model";
 import { FilterQuery, Schema } from "mongoose";
 import Community from "../models/community.model";
-import ThreadsTab from "@/components/shared/ThreadsTab";
 
 export const updateUser = async ({
     userId,
@@ -94,7 +93,7 @@ export const fetchUserPosts = async (userId : string) => {
                       populate: {
                         path: "author",
                         model: User,
-                        select: "name image id", // Select the "name" and "_id" fields from the "User" model
+                        select: "name image id username", // Select the "name" and "_id" fields from the "User" model
                       },
                     },
                 ],
@@ -211,5 +210,25 @@ export const getReplies = async (userId : string) => {
 
     } catch (error : any) {
         return new Error(`Failed to load replies : ${error.message} `)
+    }
+}
+
+export const getReposts = async (userId : string) => {
+    try {
+        
+        await connectToDB();
+
+        const user = await User.findById(userId);
+
+        const postsQuery = Threads.find({ 
+            repostedBy : userId
+        })
+
+        const posts = await postsQuery.exec();
+
+        return {threads : posts};
+
+    } catch (error : any) {
+        return new Error(`Failed to retrieve reposts: ${error.message}`)
     }
 }
