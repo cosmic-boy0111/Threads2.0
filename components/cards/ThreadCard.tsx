@@ -68,9 +68,21 @@ const ThreadCard = ({
                         <div className=' thread-card_bar' />
                     </div>
                     <div className=' flex w-full flex-col' >
-                        <Link href={`/profile/${author.id}`} className=' w-fit' >
-                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
-                        </Link>
+                        <div className=" flex justify-between">
+                            <Link href={`/profile/${author.id}`} className=' w-fit' >
+                                <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
+                            </Link>
+                            {
+                                !repostedBy &&
+                                <DeleteThread
+                                    threadId={JSON.stringify(id)}
+                                    currentUserId={currentUserId}
+                                    authorId={author.id}
+                                    parentId={parentId}
+                                    isComment={isComment}
+                                />
+                            }
+                        </div>
                         <Link href={`/thread/${id}`} >
 
                         <p className=' mt-1 text-small-regular text-light-2' >
@@ -78,7 +90,7 @@ const ThreadCard = ({
                         </p>
                         </Link>
                         <ThreadFilesViewer Files={files} />
-                        <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-3 relative`}>
+                        <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-0 relative`}>
                             <div className=' flex gap-3.5'>
                                 <TooltipProvider>
                                     <Tooltip>
@@ -199,16 +211,7 @@ const ThreadCard = ({
                     </div>
 
                 </div>
-                {
-                    !repostedBy &&
-                    <DeleteThread
-                        threadId={JSON.stringify(id)}
-                        currentUserId={currentUserId}
-                        authorId={author.id}
-                        parentId={parentId}
-                        isComment={isComment}
-                    />
-                }
+                
             </div>
             {!isComment && comments.length > 0 && (
                 <div className={`${page === 'reply' && 'max-sm:hidden'} ml-1 mt-3 flex items-center gap-2`}>

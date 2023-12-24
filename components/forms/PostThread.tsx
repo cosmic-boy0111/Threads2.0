@@ -35,10 +35,12 @@ import ThreadFilesViewer from "../shared/ThreadFilesViewer";
 
 const PostThread = ({
     author,
-    threadId
+    threadId,
+    reference
 }: {
     author: any,
-    threadId?: string
+    threadId?: string,
+    reference?:any
 }) => {
 
     let isComment = true;
@@ -106,7 +108,7 @@ const PostThread = ({
     };
 
     const scrollToBottom = () => {
-        const container = containerRef.current;
+        const container = reference ? reference.current : containerRef.current;
         if (container && multipleFile.length === 0) {
           container.scrollTop = container.scrollHeight;
         }
@@ -185,7 +187,7 @@ const PostThread = ({
 
     return (
         <article className={`flex w-full flex-col rounded-xl md:bg-dark-2 md:p-7 sm:bg-none sm:p-0 sm:mt-0 md:mt-10 lg:mt-10`} >
-            <div ref={containerRef} className=" flex items-start justify-between max-sm:max-h-[86vh] max-sm:overflow-y-scroll">
+            <div ref={containerRef} className={` flex items-start justify-between ${!reference && ' max-sm:max-h-[86vh] max-sm:overflow-y-scroll'}`}>
                 <div className=" flex w-full flex-1 flex-row gap-4">
 
                     <div className=" flex flex-col items-center">
@@ -227,7 +229,7 @@ const PostThread = ({
                                                     value={field.value}
                                                     onChange={(e: any) => handleThread(e, field.onChange)}
                                                     rows={1}
-                                                    className=" border-none outline-none resize-none"
+                                                    className=" border-none outline-none resize-none overflow-y-hidden"
                                                     placeholder={`${threadId ? 'Reply' : 'Start'} a thread...`}
                                                 />
                                             </FormControl>

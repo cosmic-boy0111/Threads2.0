@@ -19,7 +19,7 @@ const ThreadFilesViewer = (
 
                         {Files.length !== 0 &&
                             Files.map((file, index) => (
-                                <div className={`relative h-auto inline-block ${Files.length > 1 && 'mr-2'}`}>
+                                <div className={`relative h-auto inline-block ${Files.length > 1 && Files.length !== (index + 1) && 'mr-2'}`}>
                                     {
                                         file.type.includes('image') ?
                                             <img className={`object-cover sm:w-auto ${Files.length === 1 ? 'md:w-auto md:h-96' : 'md:w-auto'}  ${Files.length === 1 ? 'h-auto' : ' h-44 sm:h-44 xs:h-44 md:h-64 xl:h-64'} rounded-md `} src={file.url} alt="..." /> :
