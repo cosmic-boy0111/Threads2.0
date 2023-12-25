@@ -16,6 +16,8 @@ import ShareBtn from '../shared/ShareBtn'
 import { Repeat, Repeat1 } from 'lucide-react'
 import RepostThread from '../forms/RepostThread'
 import LikeThread from '../forms/LikeThread'
+import Menu from '../dialogs/Menu'
+import ThreadDrawer from '../dialogs/ThreadDrawer'
 
 const SelectedThread = ({
     id,
@@ -75,14 +77,19 @@ const SelectedThread = ({
                 </div>
                 
                 {
-                    !repostedBy &&
-                    <DeleteThread
-                        threadId={JSON.stringify(id)}
-                        currentUserId={currentUserId}
-                        authorId={author.id}
-                        parentId={parentId}
-                        isComment={isComment}
-                    />
+                    authorId.toString() === userSecondId.toString() && (
+                        <>
+                            <Menu /> 
+                            <ThreadDrawer /> 
+                        </>
+                    )
+                    // <DeleteThread
+                    //     threadId={JSON.stringify(id)}
+                    //     currentUserId={currentUserId}
+                    //     authorId={author.id}
+                    //     parentId={parentId}
+                    //     isComment={isComment}
+                    // />
                 }
             </div>
             <div className=' flex w-full flex-col' >

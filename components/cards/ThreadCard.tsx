@@ -16,6 +16,8 @@ import ShareBtn from '../shared/ShareBtn'
 import { Repeat, Repeat1 } from 'lucide-react'
 import RepostThread from '../forms/RepostThread'
 import LikeThread from '../forms/LikeThread'
+import Menu from '../dialogs/Menu'
+import ThreadDrawer from '../dialogs/ThreadDrawer'
 
 const ThreadCard = ({
     id,
@@ -68,20 +70,28 @@ const ThreadCard = ({
                         <div className=' thread-card_bar' />
                     </div>
                     <div className=' flex w-full flex-col' >
-                        <div className=" flex justify-between">
+                        <div className=" flex justify-between items-center">
                             <Link href={`/profile/${author.id}`} className=' w-fit' >
                                 <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
                             </Link>
+                            <div className=''>
+
                             {
-                                !repostedBy &&
-                                <DeleteThread
-                                    threadId={JSON.stringify(id)}
-                                    currentUserId={currentUserId}
-                                    authorId={author.id}
-                                    parentId={parentId}
-                                    isComment={isComment}
-                                />
+                                authorId.toString() === userSecondId.toString() && (
+                                    <>
+                                        <Menu /> 
+                                        <ThreadDrawer /> 
+                                    </>
+                                ) 
+                                // <DeleteThread
+                                //     threadId={JSON.stringify(id)}
+                                //     currentUserId={currentUserId}
+                                //     authorId={author.id}
+                                //     parentId={parentId}
+                                //     isComment={isComment}
+                                // />
                             }
+                            </div>
                         </div>
                         <Link href={`/thread/${id}`} >
 

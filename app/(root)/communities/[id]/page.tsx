@@ -30,7 +30,7 @@ const page = async ({params} : { params : { id : string }}) => {
 
            <div className=" mt-3">
                 <Tabs defaultValue="threads" className=" w-full">
-                    <TabsList className="tab">
+                    <TabsList className="tab sticky top-[54px] max-sm:-top-1 z-30">
                         {
                             communityTabs.map((tab) => (
                                 <TabsTrigger key={tab.label} value={tab.value} className="tab">
@@ -51,6 +51,7 @@ const page = async ({params} : { params : { id : string }}) => {
                             ))
                         }
                     </TabsList>
+                    <div className='h-0.5 w-full bg-dark-3' />
                     <TabsContent value={'threads'} className=" w-full text-light-1">
                         <ThreadsTab 
                             currentUserId={user.id}
@@ -72,13 +73,13 @@ const page = async ({params} : { params : { id : string }}) => {
                             ))}
                         </section>
                     </TabsContent>
-                    <TabsContent value={'requests'} className=" w-full text-light-1">
+                    {/* <TabsContent value={'requests'} className=" w-full text-light-1">
                         <ThreadsTab 
                             currentUserId={user.id}
                             accountId={communityDetails._id}
                             accountType="Community"
                         />
-                    </TabsContent>
+                    </TabsContent> */}
                 </Tabs>
            </div>
         </section>
