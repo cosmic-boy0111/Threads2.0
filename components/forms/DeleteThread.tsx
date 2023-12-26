@@ -32,12 +32,10 @@ function DeleteThread({
   const handleDelete = async () => {
 
     await Api._thread._deleteThread(JSON.parse(threadId), pathname, parentId);
-    if ((!parentId || !isComment) && !pathname.includes('profile')) {
-      router.push("/");
-    }
 
-    if(closeFunction){
-      closeFunction();
+    if(pathname.includes(JSON.parse(threadId)) || pathname.includes(threadId)){
+      router.push('/');
+      document.documentElement.style.overflow = 'auto';
     }
     
   }

@@ -166,7 +166,8 @@ const PostThread = ({
                 path: pathname,
             })
 
-            handleReset();
+            // handleReset();
+            router.push('/');
         } else {
             await Api._thread._createThread({
                 text: tempThread,

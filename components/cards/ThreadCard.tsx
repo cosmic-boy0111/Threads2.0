@@ -169,15 +169,15 @@ const ThreadCard = ({
                                 </TooltipProvider>
 
                             </div>
-                            <div className='flex gap-2'>
+                            {/* <div className='flex gap-2'>
                                 {isComment && comments.length > 0 && (
                                     <Link href={`/thread/${id}`}>
                                         <p className=' mt-1 text-su text-light-2' >{comments.length} repl{comments.length > 1 ? "ies" : "y"}</p>
                                     </Link>
                                 )}
-                                {isComment && likesCount > 0 && (
+                                {isComment && likesCount > 0 && comments.length > 0 && (
                                         <span className='mt-1 text-su text-light-2 relative bottom-1'>
-                                            .
+                                            {comments.length} .
                                         </span>
                                 )}
 
@@ -189,7 +189,7 @@ const ThreadCard = ({
                                     </div>
                                 )}
 
-                            </div>
+                            </div> */}
                             {!community && isComment && (
                                 <div className=' mt-1 flex items-center'>
                                     <p className=' text-small-regular text-gray-1'>
@@ -207,7 +207,7 @@ const ThreadCard = ({
                                     </Link>
                                 )}
 
-                                {!isComment && likesCount > 0 && (
+                                {!isComment && likesCount > 0 && comments.length > 0 && (
                                         <span className='mt-1 text-small-regular text-gray-1 relative bottom-1'>
                                             .
                                         </span>
@@ -246,6 +246,13 @@ const ThreadCard = ({
 
                 </div>
             )}
+            {
+                comments.length == 0 && likesCount !==0 && (
+                    <div className=' w-20 h-8'>
+
+                    </div>
+                )
+            }
             <div className=" flex w-full flex-1 flex-row gap-4">
 
                 <div className=" flex flex-col items-end justify-end">

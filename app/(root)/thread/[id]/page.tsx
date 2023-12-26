@@ -19,6 +19,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
     const thread = await Api._thread._fetchThreadById(params.id);
     console.log("threads : ", thread);
+    if(!thread) return null;
     
     
     return (
