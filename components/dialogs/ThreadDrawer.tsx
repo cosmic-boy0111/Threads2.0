@@ -1,16 +1,27 @@
 'use client'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+
 import { MoreHorizontal } from "lucide-react"
 import { useEffect, useState } from "react"
+import { Button } from "../ui/button"
+import Option from "../shared/Option"
+import DeleteThread from "../forms/DeleteThread"
 
-const ThreadDrawer = () => {
+interface Props {
+    threadId: string;
+    currentUserId: string;
+    authorId: string;
+    parentId: string | null;
+    isComment?: boolean;
+  }
+  
+
+const ThreadDrawer = ({
+    threadId,
+    currentUserId,
+    authorId,
+    parentId,
+    isComment,
+  }: Props) => {
     const [open, setOpen] = useState<boolean>(false)
     useEffect(() => {
         console.log('inside');
@@ -48,16 +59,19 @@ const ThreadDrawer = () => {
             {
                 open &&
                 <>
-                <div onClick={handleClose} className=" text-light-1 fixed w-[100%] left-0 z-50 bottom-0 -top-1 h-[100vh] bg-glassmorphism flex flex-col justify-end">
-                </div>
-                <div className=" text-light-1 rounded-lg fixed left-0 w-[100%] z-50 -bottom-1 bg-dark-4 p-4 py-5 pt-7 flex flex-col gap-3">
-                    <div className=" px-4 py-3 bg-dark-3 rounded-md">
-                        Edit
+                    <div onClick={handleClose} className=" text-light-1 fixed w-[100%] left-0 z-50 bottom-0 -top-1 h-[100vh] bg-glassmorphism flex flex-col justify-end">
                     </div>
-                    <div className=" px-4 py-3 bg-dark-3 rounded-md text-red-500">
-                        Delete
+                    <div className=" text-light-1 rounded-lg fixed left-0 w-[100%] z-50 -bottom-1 bg-dark-2 p-4 py-5 pt-7 flex flex-col gap-3">
+                        <Option displayName='Edit' className=' text-light-1 bg-dark-4 justify-start  hover:bg-dark-3' />
+                        <DeleteThread
+                            threadId={threadId}
+                            currentUserId={currentUserId}
+                            authorId={authorId}
+                            parentId={parentId}
+                            isComment={isComment}
+                            closeFunction={handleClose}
+                        />
                     </div>
-                </div>
                 </>
             }
         </div>

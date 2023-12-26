@@ -18,6 +18,7 @@ import RepostThread from '../forms/RepostThread'
 import LikeThread from '../forms/LikeThread'
 import Menu from '../dialogs/Menu'
 import ThreadDrawer from '../dialogs/ThreadDrawer'
+import Option from '../shared/Option'
 
 const SelectedThread = ({
     id,
@@ -75,12 +76,24 @@ const SelectedThread = ({
                     </div>
 
                 </div>
-                
+
                 {
                     authorId.toString() === userSecondId.toString() && (
                         <>
-                            <Menu /> 
-                            <ThreadDrawer /> 
+                            <Menu
+                                threadId={JSON.stringify(id)}
+                                currentUserId={currentUserId}
+                                authorId={author.id}
+                                parentId={parentId}
+                                isComment={isComment}
+                            />
+                            <ThreadDrawer
+                                threadId={JSON.stringify(id)}
+                                currentUserId={currentUserId}
+                                authorId={author.id}
+                                parentId={parentId}
+                                isComment={isComment}
+                            />
                         </>
                     )
                     // <DeleteThread
@@ -93,107 +106,107 @@ const SelectedThread = ({
                 }
             </div>
             <div className=' flex w-full flex-col' >
-                        <p className=' mt-1 text-small-regular text-light-2' >
-                            {content}
-                        </p>
-                        <ThreadFilesViewer Files={files} />
-                        <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-3 relative`}>
-                            <div className=' flex gap-3.5'>
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <LikeThread
-                                                isLike={isLike}
-                                                userId={userSecondId}
-                                                threadId={id}
-                                            />
-                                        </TooltipTrigger>
-                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
-                                            <p>Like</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <Link href={`/reply/${id}`}>
-                                                <Image src={'/assets/reply.svg'}
-                                                    alt='reply'
-                                                    width={24}
-                                                    height={24}
-                                                    className=' cursor-pointer object-contain'
-                                                />
-                                            </Link>
-                                        </TooltipTrigger>
-                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
-                                            <p>Reply</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <RepostThread
-                                                isReposted={isReposted}
-                                                currentUserId={userSecondId}
-                                                authorId={authorId}
-                                                parentId={parentId}
-                                                referenceThread={id}
-                                                repostThreadId={repostThreadId}
-                                            />
-                                        </TooltipTrigger>
-                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
-                                            <p>Repost</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <ShareBtn id={id} />
-                                        </TooltipTrigger>
-                                        <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
-                                            <p>Share</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-
-                            </div>
-                            
-                            
-                            <div className='flex gap-2'>
-
-                                {!isComment && comments.length > 0 && (
-                                    <Link href={`/thread/${id}`} >
-                                        <p className='mt-1 text-small-regular text-gray-1'>
-                                            {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-                                        </p>
+                <p className=' mt-1 text-small-regular text-light-2' >
+                    {content}
+                </p>
+                <ThreadFilesViewer Files={files} />
+                <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-3 relative`}>
+                    <div className=' flex gap-3.5'>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <LikeThread
+                                        isLike={isLike}
+                                        userId={userSecondId}
+                                        threadId={id}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                    <p>Like</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Link href={`/reply/${id}`}>
+                                        <Image src={'/assets/reply.svg'}
+                                            alt='reply'
+                                            width={24}
+                                            height={24}
+                                            className=' cursor-pointer object-contain'
+                                        />
                                     </Link>
-                                )}
-
-                                {!isComment && likesCount > 0 && (
-                                        <span className='mt-1 text-small-regular text-gray-1 relative bottom-1'>
-                                            .
-                                        </span>
-                                )}
-
-                                {!isComment && likesCount > 0 && (
-                                    <div>
-                                        <p className='mt-1 text-small-regular text-gray-1'>
-                                            {likesCount} like{likesCount > 1 ? "s" : ""}
-                                        </p>
-                                    </div>
-                                )}
-
-                            </div>
-
-                        </div>
+                                </TooltipTrigger>
+                                <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                    <p>Reply</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <RepostThread
+                                        isReposted={isReposted}
+                                        currentUserId={userSecondId}
+                                        authorId={authorId}
+                                        parentId={parentId}
+                                        referenceThread={id}
+                                        repostThreadId={repostThreadId}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                    <p>Repost</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <ShareBtn id={id} />
+                                </TooltipTrigger>
+                                <TooltipContent className=' bg-dark-4 px-2 py-1 border-transparent text-su text-light-3'>
+                                    <p>Share</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
 
                     </div>
-           
+
+
+                    <div className='flex gap-2'>
+
+                        {!isComment && comments.length > 0 && (
+                            <Link href={`/thread/${id}`} >
+                                <p className='mt-1 text-small-regular text-gray-1'>
+                                    {comments.length} repl{comments.length > 1 ? "ies" : "y"}
+                                </p>
+                            </Link>
+                        )}
+
+                        {!isComment && likesCount > 0 && (
+                            <span className='mt-1 text-small-regular text-gray-1 relative bottom-1'>
+                                .
+                            </span>
+                        )}
+
+                        {!isComment && likesCount > 0 && (
+                            <div>
+                                <p className='mt-1 text-small-regular text-gray-1'>
+                                    {likesCount} like{likesCount > 1 ? "s" : ""}
+                                </p>
+                            </div>
+                        )}
+
+                    </div>
+
+                </div>
+
+            </div>
+
             <div className=" flex w-full flex-1 flex-row gap-4">
 
-                
+
                 <div className={`${page === 'reply' && 'max-sm:hidden'} flex w-full flex-col`} >
                     {!isComment && community && (
                         <Link href={`/communities/${community.id}`} className=' mt-1 flex items-center'>

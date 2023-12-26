@@ -18,6 +18,7 @@ import RepostThread from '../forms/RepostThread'
 import LikeThread from '../forms/LikeThread'
 import Menu from '../dialogs/Menu'
 import ThreadDrawer from '../dialogs/ThreadDrawer'
+import Option from '../shared/Option'
 
 const ThreadCard = ({
     id,
@@ -39,6 +40,7 @@ const ThreadCard = ({
     repostThreadId,
     page
 }: _IthreadCard) => {
+
 
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'} `} >
@@ -79,17 +81,22 @@ const ThreadCard = ({
                             {
                                 authorId.toString() === userSecondId.toString() && (
                                     <>
-                                        <Menu /> 
-                                        <ThreadDrawer /> 
+                                        <Menu 
+                                            threadId={JSON.stringify(id)}
+                                            currentUserId={currentUserId}
+                                            authorId={author.id}
+                                            parentId={parentId}
+                                            isComment={isComment}
+                                        /> 
+                                        <ThreadDrawer 
+                                            threadId={JSON.stringify(id)}
+                                            currentUserId={currentUserId}
+                                            authorId={author.id}
+                                            parentId={parentId}
+                                            isComment={isComment}
+                                        /> 
                                     </>
-                                ) 
-                                // <DeleteThread
-                                //     threadId={JSON.stringify(id)}
-                                //     currentUserId={currentUserId}
-                                //     authorId={author.id}
-                                //     parentId={parentId}
-                                //     isComment={isComment}
-                                // />
+                                )
                             }
                             </div>
                         </div>

@@ -53,7 +53,7 @@ const ProfileHeader = ({
             <p className={`${(bio === "" || bio === "org bio") && 'hidden'} mt-6 max-w-lg text-base-regular text-light-2`} >{
                 bio
             }</p>
-            { type !== 'Community' && 
+            { accountId === authUserId && type !== 'Community' && 
             <div className=' mt-2 md:hidden lg:hidden'>
                 <div className=' flex gap-3 mb-2 items-center text-light-1'>
                     <p className=' text-small-regular'> Switch Organization </p>
