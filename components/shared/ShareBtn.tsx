@@ -17,6 +17,7 @@ const ShareBtn = ({ id }: {
                     url: `${window.location.origin}/thread/${id}`,
                     title: "Thread",
                 }}
+                disableNative={true}
                 onClick={() => console.log("shared successfully!")}
             >
 
