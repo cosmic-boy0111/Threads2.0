@@ -26,7 +26,7 @@ export default function RootLayout({
       baseTheme : dark
     }}>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`${inter.className} bg-dark-1`}>
           <Topbar />
 
           <main className=' flex flex-row' >

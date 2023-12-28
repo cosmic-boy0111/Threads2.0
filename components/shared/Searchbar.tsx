@@ -28,12 +28,12 @@ function Searchbar({ routeType }: Props) {
   }, [search, routeType]);
 
   return (
-    <div className='searchbar'>
+    <div className='searchbar bg-dark-2'>
       <Image
         src='/assets/search-gray.svg'
         alt='search'
-        width={23}
-        height={23}
+        width={18}
+        height={18}
         className='object-contain'
       />
       <Input

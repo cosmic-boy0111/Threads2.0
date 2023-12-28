@@ -64,6 +64,7 @@ export async function createThread({ text, author, communityId, files, path }: _
             text,
             author,
             files,
+            createdAt : new Date(),
             community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
         });
 
@@ -268,6 +269,7 @@ export async function addCommentToThread({
             text: commentText,
             author: userId,
             files : files,
+            createdAt : new Date(),
             parentId: threadId, // Set the parentId to the original thread's ID
         });
 

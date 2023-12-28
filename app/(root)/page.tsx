@@ -1,10 +1,11 @@
 import RepostThreadCard from "@/components/cards/RepostThreadCard";
 import ThreadCard from "@/components/cards/ThreadCard";
+import Pagination from "@/components/shared/Pagination";
 import { Api } from "@/lib/api"
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-const Home =  async ({
+const Home = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
@@ -30,42 +31,48 @@ const Home =  async ({
       <section className=" md:mt-9 sm:mt-2 flex flex-col sm:gap-1 md:gap-10" >
         {result.posts.length === 0 ? (
           <p className="no-result" > No Threads Found </p>
-        ) :  (
+        ) : (
           <>
             {result.posts.map((post) => (
-              post.repostedBy ? 
-              <RepostThreadCard 
-                repostId={post._id}
-                referenceThread={post.referenceThread} 
-                currentUserId={user?.id || ""} 
-                userSecondId={userInfo._id} 
-                repostedBy={post.repostedBy}
-                isComment={false}
-              /> 
+              post.repostedBy ?
+                <RepostThreadCard
+                  repostId={post._id}
+                  referenceThread={post.referenceThread}
+                  currentUserId={user?.id || ""}
+                  userSecondId={userInfo._id}
+                  repostedBy={post.repostedBy}
+                  isComment={false}
+                />
                 :
-              <ThreadCard 
-                key={post._id}
-                id={post._id}
-                currentUserId={user?.id || ""}
-                parentId={post.parentId}
-                content={post.text}
-                author={post.author}
-                files={post.files || []}
-                community={post.community}
-                createdAt={post.createdAt}
-                comments={post.children}
-                isReposted={post.reposters ? post.reposters.includes(userInfo._id) : false}
-                isLike={post.likes ? post.likes.includes(userInfo._id) : false}
-                likesCount={post.likes ? post.likes.length : 0}
-                userSecondId={userInfo._id}
-                authorId={post.author._id} 
-                repostedBy={post.repostedBy} 
-              />
+                <ThreadCard
+                  key={post._id}
+                  id={post._id}
+                  currentUserId={user?.id || ""}
+                  parentId={post.parentId}
+                  content={post.text}
+                  author={post.author}
+                  files={post.files || []}
+                  community={post.community}
+                  createdAt={post.createdAt}
+                  comments={post.children}
+                  isReposted={post.reposters ? post.reposters.includes(userInfo._id) : false}
+                  isLike={post.likes ? post.likes.includes(userInfo._id) : false}
+                  likesCount={post.likes ? post.likes.length : 0}
+                  userSecondId={userInfo._id}
+                  authorId={post.author._id}
+                  repostedBy={post.repostedBy}
+                />
             ))}
           </>
         )}
+
+        <Pagination
+          path='/'
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </section>
-    </> 
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import React from 'react'
 import ThreadCard from '../cards/ThreadCard';
 import { currentUser } from '@clerk/nextjs';
+import RepostThreadCard from '../cards/RepostThreadCard';
 
 const ThreadsTab = async ({
     currentUserId,
@@ -25,17 +26,29 @@ const ThreadsTab = async ({
     } else if(accountType === 'Replies'){
         result = await Api._user._getReplies(accountId)
         console.log(result);
-    }
-    else{
+    }else if(accountType === 'User' ){
         result = await Api._user._fetchUserPosts(accountId);
-        console.log(result.children);
-        
+        console.log(result);
+    }else if(accountType === 'Reposts'){
+        result = await Api._user._getReposts(accountId);
+        console.log(result);
     }
     if(!result) redirect('/')
 
     return (
         <section className=' mt-9 flex flex-col sm:gap-1 md:gap-10' >
             {result.threads.map((thread : any) => (
+                thread.repostedBy ?
+                <RepostThreadCard
+                  repostId={thread._id}
+                  referenceThread={thread.referenceThread}
+                  currentUserId={user?.id || ""}
+                  userSecondId={userInfo._id}
+                  repostedBy={thread.repostedBy}
+                  isComment={false}
+                  showUser={true}
+                />
+                :
                 <ThreadCard
                     key={thread._id}
                     id={thread._id}

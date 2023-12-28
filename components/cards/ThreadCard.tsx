@@ -16,6 +16,9 @@ import ShareBtn from '../shared/ShareBtn'
 import { Repeat, Repeat1 } from 'lucide-react'
 import RepostThread from '../forms/RepostThread'
 import LikeThread from '../forms/LikeThread'
+import Menu from '../dialogs/Menu'
+import ThreadDrawer from '../dialogs/ThreadDrawer'
+import Option from '../shared/Option'
 
 const ThreadCard = ({
     id,
@@ -38,9 +41,10 @@ const ThreadCard = ({
     page
 }: _IthreadCard) => {
 
+
     return (
         <article className={`flex w-full flex-col rounded-xl ${isComment ? ' px-0 xs:px-7' : 'md:bg-dark-2 md:p-7 sm:bg-none sm:p-0'} `} >
-            {repostedBy &&
+            {repostedBy && userSecondId.toString() !== repostedBy.id.toString() &&
                 <div className=" flex w-full flex-1 flex-row gap-4">
 
                     <div className=" flex flex-col items-end justify-end">
@@ -68,9 +72,34 @@ const ThreadCard = ({
                         <div className=' thread-card_bar' />
                     </div>
                     <div className=' flex w-full flex-col' >
-                        <Link href={`/profile/${author.id}`} className=' w-fit' >
-                            <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
-                        </Link>
+                        <div className=" flex justify-between items-center">
+                            <Link href={`/profile/${author.id}`} className=' w-fit' >
+                                <h4 className=' cursor-pointer text-base-semibold text-light-1' >{author.username}</h4>
+                            </Link>
+                            <div className=''>
+
+                            {
+                                authorId.toString() === userSecondId.toString() && (
+                                    <>
+                                        <Menu 
+                                            threadId={JSON.stringify(id)}
+                                            currentUserId={currentUserId}
+                                            authorId={author.id}
+                                            parentId={parentId}
+                                            isComment={isComment}
+                                        /> 
+                                        <ThreadDrawer 
+                                            threadId={JSON.stringify(id)}
+                                            currentUserId={currentUserId}
+                                            authorId={author.id}
+                                            parentId={parentId}
+                                            isComment={isComment}
+                                        /> 
+                                    </>
+                                )
+                            }
+                            </div>
+                        </div>
                         <Link href={`/thread/${id}`} >
 
                         <p className=' mt-1 text-small-regular text-light-2' >
@@ -78,7 +107,7 @@ const ThreadCard = ({
                         </p>
                         </Link>
                         <ThreadFilesViewer Files={files} />
-                        <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-3 relative`}>
+                        <div className={`${isComment && 'mb-10'} ${page === 'reply' && 'max-sm:hidden'} mt-1 flex flex-col gap-0 relative`}>
                             <div className=' flex gap-3.5'>
                                 <TooltipProvider>
                                     <Tooltip>
@@ -140,15 +169,15 @@ const ThreadCard = ({
                                 </TooltipProvider>
 
                             </div>
-                            <div className='flex gap-2'>
+                            {/* <div className='flex gap-2'>
                                 {isComment && comments.length > 0 && (
                                     <Link href={`/thread/${id}`}>
                                         <p className=' mt-1 text-su text-light-2' >{comments.length} repl{comments.length > 1 ? "ies" : "y"}</p>
                                     </Link>
                                 )}
-                                {isComment && likesCount > 0 && (
+                                {isComment && likesCount > 0 && comments.length > 0 && (
                                         <span className='mt-1 text-su text-light-2 relative bottom-1'>
-                                            .
+                                            {comments.length} .
                                         </span>
                                 )}
 
@@ -160,7 +189,7 @@ const ThreadCard = ({
                                     </div>
                                 )}
 
-                            </div>
+                            </div> */}
                             {!community && isComment && (
                                 <div className=' mt-1 flex items-center'>
                                     <p className=' text-small-regular text-gray-1'>
@@ -178,7 +207,7 @@ const ThreadCard = ({
                                     </Link>
                                 )}
 
-                                {!isComment && likesCount > 0 && (
+                                {!isComment && likesCount > 0 && comments.length > 0 && (
                                         <span className='mt-1 text-small-regular text-gray-1 relative bottom-1'>
                                             .
                                         </span>
@@ -199,16 +228,7 @@ const ThreadCard = ({
                     </div>
 
                 </div>
-                {
-                    !repostedBy &&
-                    <DeleteThread
-                        threadId={JSON.stringify(id)}
-                        currentUserId={currentUserId}
-                        authorId={author.id}
-                        parentId={parentId}
-                        isComment={isComment}
-                    />
-                }
+                
             </div>
             {!isComment && comments.length > 0 && (
                 <div className={`${page === 'reply' && 'max-sm:hidden'} ml-1 mt-3 flex items-center gap-2`}>
@@ -226,6 +246,13 @@ const ThreadCard = ({
 
                 </div>
             )}
+            {
+                comments.length == 0 && likesCount !==0 && (
+                    <div className=' w-20 h-8'>
+
+                    </div>
+                )
+            }
             <div className=" flex w-full flex-1 flex-row gap-4">
 
                 <div className=" flex flex-col items-end justify-end">

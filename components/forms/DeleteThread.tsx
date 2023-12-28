@@ -4,6 +4,8 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 import { Api } from "@/lib/api";
+import Option from "../shared/Option";
+import ConfirmDialog from "../dialogs/ConfirmDialog";
 
 interface Props {
   threadId: string;
@@ -11,6 +13,7 @@ interface Props {
   authorId: string;
   parentId: string | null;
   isComment?: boolean;
+  closeFunction?: any
 }
 
 function DeleteThread({
@@ -19,25 +22,30 @@ function DeleteThread({
   authorId,
   parentId,
   isComment,
+  closeFunction
 }: Props) {
   const pathname = usePathname();
   const router = useRouter();
 
-  if (currentUserId !== authorId || pathname === "/") return null;
+  if (currentUserId !== authorId) return null;
+
+  const handleDelete = async () => {
+
+    await Api._thread._deleteThread(JSON.parse(threadId), pathname, parentId);
+
+    if(pathname.includes(JSON.parse(threadId)) || pathname.includes(threadId)){
+      router.push('/');
+      document.documentElement.style.overflow = 'auto';
+    }
+    
+  }
 
   return (
-    <Image
-      src='/assets/delete.svg'
-      alt='delte'
-      width={18}
-      height={18}
-      className='cursor-pointer object-contain'
-      onClick={async () => {
-        await Api._thread._deleteThread(JSON.parse(threadId), pathname, parentId);
-        if ((!parentId || !isComment) && !pathname.includes('profile')) {
-          router.push("/");
-        }
-      }}
+    <ConfirmDialog 
+      title="Delete this post ?"
+      actionName="Delete"
+      handleConfirm={handleDelete} 
+      trigger={<Option displayName='Delete' className=' justify-start bg-dark-4 text-red-500  hover:bg-dark-3' />}
     />
   );
 }
